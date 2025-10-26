@@ -6,7 +6,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React, { lazy, Suspense } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import AllUsersPage from "./pages/Admin/Dashboard/AllUsers";
-import Dashboard from "./pages/Admin/Dashboard/Dashboard";
 import AllOrders from "./pages/Admin/Dashboard/shared/AllOrders";
 import EbonixPrompt from "./pages/ebonix-prompt/EbonixPrompt";
 import LibraryPage from "./pages/ebonix-prompt/Library/Library";
@@ -48,7 +47,7 @@ const App = React.memo(() => (
               <Route path="/" element={<Index />} />
               <Route path="/app" element={<EbonixPrompt />} />
               <Route path="app/library" element={<LibraryPage />} />
-              <Route path="/dashboard" element={<Dashboard />} />
+              {/* <Route path="/dashboard" element={<Dashboard />} /> */}
               <Route path="/all-users" element={<AllUsersPage />} />
               <Route path="dashboard/all-orders" element={<AllOrders />} />
               <Route path="*" element={<NotFound />} />

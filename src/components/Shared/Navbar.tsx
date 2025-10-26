@@ -1,5 +1,5 @@
-import { useTheme } from "@/pages/HomePage/ThemeProvider";
 import { Button } from "@/components/ui/button";
+import { useTheme } from "@/pages/HomePage/ThemeProvider";
 import { Moon, Sun } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -20,8 +20,9 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`sticky top-0 left-0 w-full bg-background py-6 md:py-8 z-50 transition-all ${isShadow ? "shadow-lg" : ""
-        }`}
+      className={`sticky top-0 left-0 w-full bg-background py-6 md:py-8 z-50 transition-all ${
+        isShadow ? "shadow-lg" : ""
+      }`}
     >
       <div className="container-custom flex items-center justify-between">
         {/* Logo */}
@@ -87,16 +88,19 @@ const Navbar = () => {
             <span className="sr-only">Open menu</span>
             <div className="space-y-2">
               <span
-                className={`block w-8 h-0.5 bg-foreground transition-all duration-300 ${isMenuOpen ? "rotate-45 translate-y-2.5" : ""
-                  }`}
+                className={`block w-8 h-0.5 bg-foreground transition-all duration-300 ${
+                  isMenuOpen ? "rotate-45 translate-y-2.5" : ""
+                }`}
               ></span>
               <span
-                className={`block w-8 h-0.5 bg-foreground transition-all duration-300 ${isMenuOpen ? "opacity-0" : ""
-                  }`}
+                className={`block w-8 h-0.5 bg-foreground transition-all duration-300 ${
+                  isMenuOpen ? "opacity-0" : ""
+                }`}
               ></span>
               <span
-                className={`block w-8 h-0.5 bg-foreground transition-all duration-300 ${isMenuOpen ? "-rotate-45" : ""
-                  }`}
+                className={`block w-8 h-0.5 bg-foreground transition-all duration-300 ${
+                  isMenuOpen ? "-rotate-45" : ""
+                }`}
               ></span>
             </div>
           </button>
@@ -105,10 +109,11 @@ const Navbar = () => {
 
       {/* Mobile menu */}
       <div
-        className={`lg:hidden absolute w-full bg-background border-t border-ebonix-gray-medium transition-all duration-300 ${isMenuOpen
-          ? "max-h-96 py-6 opacity-100"
-          : "max-h-0 overflow-hidden opacity-0"
-          }`}
+        className={`lg:hidden absolute w-full bg-background border-t border-ebonix-gray-medium transition-all duration-300 ${
+          isMenuOpen
+            ? "max-h-96 py-6 opacity-100"
+            : "max-h-0 overflow-hidden opacity-0"
+        }`}
       >
         <div className="container-custom flex flex-col space-y-6">
           <div className="flex flex-col space-y-3">
@@ -137,9 +142,9 @@ const NavLinks = () => {
 
   return (
     <>
-      <a href="/dashboard" className={linkClass}>
+      {/* <a href="/dashboard" className={linkClass}>
         Dashboard
-      </a>
+      </a> */}
       <a href="#" className={linkClass}>
         Product
       </a>
