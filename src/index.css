@@ -1,0 +1,142 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Light mode (#F9FAF5 background and #24282C foreground) */
+    --background: 60 20% 97%;
+    --foreground: 217 10% 16%;
+
+    --dark-para: 210, 3%, 36%;
+    --search-text: 200, 2%, 68%, 1;
+
+    --gray-background: 180, 5%, 96%;
+    --prompt-category-bg: var(--gray-background);
+
+    --card: 60 20% 97%;
+    --card-foreground: 217 10% 16%;
+    --card-shadow: 180, 5%, 96%, 1;
+
+    --popover: 60 20% 97%;
+    --popover-foreground: 217 10% 16%;
+
+    --primary: 252 95% 58%;
+    --primary-foreground: 60 20% 97%;
+
+    --secondary: 60 20% 94%;
+    --secondary-foreground: 217 10% 16%;
+
+    --muted: 60 20% 94%;
+    --muted-foreground: 215 20% 65%;
+
+    --mobile-mockup-bg: 180, 5%, 96%, 1;
+    --speech-text-bg: 180, 5%, 96%, 1;
+    --web-speech-bg: 180, 5%, 96%, 1;
+
+    --accent: 252 95% 58%;
+    --accent-foreground: 60 20% 97%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 60 20% 97%;
+    --border-gradient: 45deg, #b4cf5b, #2dcdf5;
+
+    --border: 60 20% 90%;
+    --input: 60 20% 90%;
+    --ring: 252 95% 58%;
+
+    --radius: 0.5rem;
+
+    --chart-foreground: rgb(17, 24, 39);
+  }
+
+  .dark {
+    /* Dark mode (#24282C background and #F9FAF5 foreground) */
+    --background: 217 10% 16%;
+    --foreground: 60 20% 97%;
+
+    --dark-para: 200, 2%, 68%;
+
+    --gray-background: 204, 10%, 10%, 1;
+
+    --prompt-category-bg: 218, 11%, 65%, 0.15;
+
+    --card: 217 10% 16%;
+    --card-foreground: 60 20% 97%;
+    --card-shadow: 180, 3%, 15%;
+
+    --mobile-mockup-bg: 214, 5%, 26%, 1;
+    --speech-text-bg: 214, 5%, 26%, 1;
+    --web-speech-bg: 214, 5%, 26%, 1;
+
+    --popover: 217 10% 16%;
+    --popover-foreground: 60 20% 97%;
+
+    --primary: 252 95% 58%;
+    --primary-foreground: 60 20% 97%;
+
+    --secondary: 217 10% 20%;
+    --secondary-foreground: 60 20% 97%;
+
+    --muted: 217 10% 20%;
+    --muted-foreground: 215 20% 65%;
+
+    --accent: 252 95% 58%;
+    --accent-foreground: 60 20% 97%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 60 20% 97%;
+
+    --border: 217 10% 25%;
+    --input: 217 10% 25%;
+    --ring: 252 95% 58%;
+
+    --chart-foreground: rgb(255, 255, 255);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground transition-colors duration-300;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+      Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  }
+}
+.gradient-border {
+  position: relative;
+  border-radius: 1.5rem; /* same as rounded-3xl */
+  padding: 8px; /* padding inside border */
+  background: linear-gradient(45deg, #e7ff9b, #cfe6ff);
+}
+
+.gradient-border > .content {
+  background: white;
+  border-radius: 1.5rem;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 1;
+}
+/* Custom classes */
+.gradient-text {
+  @apply text-transparent bg-clip-text bg-gradient-to-r from-ebonix-purple to-ebonix-purple-light;
+}
+
+.gradient-bg {
+  @apply bg-gradient-to-r from-ebonix-purple to-ebonix-purple-light;
+}
+
+.hero-glow {
+  @apply absolute -z-10 blur-[120px] rounded-full opacity-30 bg-ebonix-purple;
+}
+
+.container-custom {
+  @apply container mx-auto px-4 md:px-8;
+}
