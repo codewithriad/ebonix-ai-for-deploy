@@ -11,7 +11,7 @@ const Footer: React.FC = () => {
           <div className="h-8">
             {/* <img src={DarkLogo} alt="dark-logo" className="h-full" /> */}
             <img
-              src="/public/dark-nav-logo.png"
+              src="/dark-nav-logo.png"
               alt="Ebonix"
               className="hidden dark:block h-full"
             />

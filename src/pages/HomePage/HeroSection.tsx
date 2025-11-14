@@ -27,7 +27,7 @@ const HeroSection = () => {
           >
             <Link to={"/app"}>
               <span className="text-base leading-6 text-center font-medium">
-                Get Started Free
+                Get Ebonix Ai
               </span>
             </Link>
             <BsArrowRight className="w-6 h-auto" />

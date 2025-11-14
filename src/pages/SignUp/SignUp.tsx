@@ -1,3 +1,5 @@
+// File: Signup.tsx
+
 import {
   auth,
   db,
@@ -10,7 +12,7 @@ import {
   signInWithPopup,
   updateProfile,
 } from "firebase/auth";
-import { doc, serverTimestamp, setDoc } from "firebase/firestore";
+import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
 import { Eye, EyeOff, Lock, Mail, User, UserPlus } from "lucide-react";
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -25,6 +27,27 @@ export default function Signup() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  // 🔹 Create Firestore user if not exists
+  const createUserIfNotExists = async (user: any, displayName?: string) => {
+    const userRef = doc(db, "users", user.uid);
+    const userSnap = await getDoc(userRef);
+
+    if (!userSnap.exists()) {
+      await setDoc(userRef, {
+        uid: user.uid,
+        name: displayName || user.displayName || "Unknown",
+        email: user.email,
+        photoURL: user.photoURL || "",
+        role: "user", // default role
+        status: "active",
+        verified: user.emailVerified,
+        country: "Unknown",
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+      });
+    }
+  };
+
   // 🔹 Handle Email Signup
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,7 +60,6 @@ export default function Signup() {
     setLoading(true);
 
     try {
-      // Firebase signup
       const result = await createUserWithEmailAndPassword(
         auth,
         email,
@@ -45,25 +67,10 @@ export default function Signup() {
       );
       const user = result.user;
 
-      // Update display name
       await updateProfile(user, { displayName: name });
-
-      // Save user data in Firestore
-      await setDoc(doc(db, "users", user.uid), {
-        uid: user.uid,
-        name,
-        email,
-        photoURL: user.photoURL || "",
-        role: "user",
-        status: "active",
-        verified: user.emailVerified,
-        country: "Unknown",
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp(),
-      });
+      await createUserIfNotExists(user, name);
 
       toast.success("Account created successfully!");
-      console.log(user);
       navigate("/dashboard");
     } catch (error: any) {
       console.error("Signup Error:", error);
@@ -79,7 +86,7 @@ export default function Signup() {
     }
   };
 
-  // 🔹 Handle Social Signup
+  // 🔹 Handle Social Signup (Google / Facebook / GitHub)
   const handleSocialSignup = async (providerName: string) => {
     setLoading(true);
     try {
@@ -101,23 +108,8 @@ export default function Signup() {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
 
-      // Save data to Firestore
-      await setDoc(
-        doc(db, "users", user.uid),
-        {
-          uid: user.uid,
-          name: user.displayName || "Unknown",
-          email: user.email,
-          photoURL: user.photoURL || "",
-          role: "user",
-          status: "active",
-          verified: user.emailVerified,
-          country: "Unknown",
-          createdAt: serverTimestamp(),
-          updatedAt: serverTimestamp(),
-        },
-        { merge: true }
-      );
+      // Create Firestore user if not exists
+      await createUserIfNotExists(user);
 
       toast.success(`✅ ${providerName} signup successful!`);
       navigate("/dashboard");
