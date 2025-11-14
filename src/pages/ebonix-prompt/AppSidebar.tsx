@@ -21,7 +21,7 @@ import {
 //   VideoCameraIcon,
 // } from "@heroicons/react/24/outline";
 import { ProjectModal } from "@/components/modals/ProjectModal";
-import { Book, FolderPlus, Plus, Search } from "lucide-react";
+import { Book, FileBox, FolderPlus, Plus } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { ThemeToggle } from "./ThemeToggle";
@@ -87,7 +87,7 @@ export function AppSidebar({
 
   return (
     <Sidebar
-      className={`bg-gray-500 dark:bg-gray-950 ${collapsed ? "w-14" : "w-64"}`}
+      className={`bg-gray-200 dark:bg-gray-950 ${collapsed ? "w-14" : "w-64"}`}
       collapsible="icon"
     >
       <SidebarHeader className="p-4 border-b">
@@ -111,20 +111,6 @@ export function AppSidebar({
               {/* + new chat */}
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <Button
-                    onClick={onNewChat}
-                    variant="outline"
-                    className="w-full justify-start gap-2 mb-2"
-                  >
-                    <Plus className="h-4 w-4" />
-                    {!collapsed && <span>New Chat</span>}
-                  </Button>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-
-              {/* 🔍 Search Chats */}
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
                   <NavLink
                     to="/app"
                     className={({ isActive }) =>
@@ -135,8 +121,8 @@ export function AppSidebar({
                       }`
                     }
                   >
-                    <Search className="h-4 w-4" />
-                    {!collapsed && <span>Home</span>}
+                    <Plus className="h-4 w-4" />
+                    {!collapsed && <span>New Chat</span>}
                   </NavLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -174,6 +160,25 @@ export function AppSidebar({
                       </SidebarMenuItem>
                     )}
                   </div>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+
+              {/* Modals */}
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <NavLink
+                    to="/app/modals"
+                    className={({ isActive }) =>
+                      `flex items-center gap-2 p-2 rounded-md transition-colors ${
+                        isActive
+                          ? "bg-accent text-accent-foreground"
+                          : "hover:bg-accent/50"
+                      }`
+                    }
+                  >
+                    <FileBox className="h-4 w-4" />
+                    {!collapsed && <span>Modals</span>}
+                  </NavLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
@@ -312,7 +317,7 @@ function ProjectModalTrigger({ collapsed }: { collapsed?: boolean }) {
           className={`flex items-center gap-2 p-2 rounded-md transition-colors hover:bg-accent/50 cursor-pointer`}
           onClick={() => setOpen(true)}
         >
-          {!collapsed && <span>Projects</span>}
+          {!collapsed && <span className="-ml-2">Projects</span>}
         </div>
       </SidebarMenuButton>
 

@@ -1,17 +1,14 @@
-
+import { DollarSign, ShoppingCart, TrendingUp, Users } from "lucide-react";
+import CustomerSatisfactions from "./CustomerSatisfactions";
+import LatestOrders from "./LaetstOrders";
 import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
-import KpiCard from "../Dashboard/shared/KpiCard";
-import SalesChart from "../Dashboard/shared/SalesChart";
-import { DollarSign, ShoppingCart, Users, TrendingUp } from "lucide-react";
+import KpiCard from "./shared/KpiCard";
+import SalesChart from "./shared/SalesChart";
 import TopCountries from "./shared/TopCountries";
 import UsersCard from "./shared/UsersCard";
-import LatestOrders from "./LaetstOrders";
-import CustomarSatisfactions from "./CustomerSatisfactions";
-import CustomerSatisfactions from "./CustomerSatisfactions";
 
 const Dashboard = () => {
-
   return (
     <section className="flex h-screen w-full">
       <Sidebar />

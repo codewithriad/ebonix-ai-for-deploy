@@ -5,10 +5,12 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React, { lazy, Suspense } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import AllUsersPage from "./pages/Admin/Dashboard/AllUsers";
-import AllOrders from "./pages/Admin/Dashboard/shared/AllOrders";
+import AllUsersPage from "./pages/Dashboard/AllUsers";
+import Dashboard from "./pages/Dashboard/Dashboard";
+import AllOrders from "./pages/Dashboard/shared/AllOrders";
 import EbonixPrompt from "./pages/ebonix-prompt/EbonixPrompt";
 import LibraryPage from "./pages/ebonix-prompt/Library/Library";
+import ModalsPage from "./pages/ebonix-prompt/Models/ModalsPage";
 import Chat from "./pages/ebonix-prompt/Tools/Chat";
 import Classifier from "./pages/ebonix-prompt/Tools/Classifier";
 import Coder from "./pages/ebonix-prompt/Tools/Coder";
@@ -18,6 +20,7 @@ import Video from "./pages/ebonix-prompt/Tools/Video";
 import VoiceIsolotor from "./pages/ebonix-prompt/Tools/VoiceIsolotor";
 import Voiceover from "./pages/ebonix-prompt/Tools/Voiceover";
 import Writer from "./pages/ebonix-prompt/Tools/Writer";
+import ProtectedRoute from "./routes/ProtectedRoute";
 
 const Login = lazy(() => import("./pages/Login/Login"));
 const SignUp = lazy(() => import("./pages/SignUp/SignUp"));
@@ -47,9 +50,35 @@ const App = React.memo(() => (
               <Route path="/" element={<Index />} />
               <Route path="/app" element={<EbonixPrompt />} />
               <Route path="app/library" element={<LibraryPage />} />
-              {/* <Route path="/dashboard" element={<Dashboard />} /> */}
-              <Route path="/all-users" element={<AllUsersPage />} />
-              <Route path="dashboard/all-orders" element={<AllOrders />} />
+              <Route path="app/modals" element={<ModalsPage />} />
+
+              {/* 🔐 only admin can visit dashboard */}
+              <Route
+                path="/dashboard"
+                element={
+                  <ProtectedRoute requiredRole="admin">
+                    <Dashboard />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/all-users"
+                element={
+                  <ProtectedRoute requiredRole="admin">
+                    <AllUsersPage />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="dashboard/all-orders"
+                element={
+                  <ProtectedRoute requiredRole="admin">
+                    <AllOrders />
+                  </ProtectedRoute>
+                }
+              />
               <Route path="*" element={<NotFound />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signUp" element={<SignUp />} />

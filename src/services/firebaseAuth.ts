@@ -1,20 +1,24 @@
 // src/services/firebaseAuth.ts
-import { auth, db, googleProvider } from "@/firebase.config";
+import {
+  auth,
+  db,
+  googleProvider
+} from "@/firebase";
 
 import {
   createUserWithEmailAndPassword,
-  GoogleAuthProvider,
-  signInWithCredential,
   signInWithEmailAndPassword,
   signInWithPopup,
+  signInWithCredential,
+  GoogleAuthProvider,
   signOut,
-  type User as FirebaseUser,
+  type User as FirebaseUser
 } from "firebase/auth";
 import {
   doc,
-  serverTimestamp,
   setDoc,
-  type DocumentData,
+  serverTimestamp,
+  type DocumentData
 } from "firebase/firestore";
 
 export type AppUser = {
@@ -27,10 +31,7 @@ export type AppUser = {
   lastLogin?: any;
 };
 
-async function saveUserToFirestore(
-  user: FirebaseUser,
-  extra: Partial<AppUser> = {}
-) {
+async function saveUserToFirestore(user: FirebaseUser, extra: Partial<AppUser> = {}) {
   if (!user?.uid) return;
   const userRef = doc(db, "users", user.uid);
   const payload: DocumentData = {

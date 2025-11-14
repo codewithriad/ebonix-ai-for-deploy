@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    /* Light mode (#F9FAF5 background and #24282C foreground)  */
+    /* Light mode (#F9FAF5 background and #24282C foreground) */
     --background: 60 20% 97%;
     --foreground: 217 10% 16%;
 
