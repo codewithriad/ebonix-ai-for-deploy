@@ -97,7 +97,6 @@ export default function Login() {
       setLoading(false);
     }
   };
-
   const handleSocialLogin = async (providerName: string) => {
     setLoading(true);
     try {
