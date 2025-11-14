@@ -2,7 +2,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import React from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
-import { AuthProvider } from "./context/AuthContext.tsx"; // ✅ add this line
+import { AuthProvider } from "./context/AuthContext.tsx";
 import "./index.css";
 import { ThemeProvider } from "./pages/HomePage/ThemeProvider.tsx";
 
