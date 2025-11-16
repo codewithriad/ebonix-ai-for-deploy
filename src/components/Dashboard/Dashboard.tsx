@@ -6,8 +6,8 @@ import {
   IconTopologyStar3,
 } from "@tabler/icons-react";
 import { useState } from "react";
-import Sidebar from "./Sidebar";
 import PromptPanel from "../Shared/PromptPannel";
+import Sidebar from "./Sidebar";
 
 const Dashboard = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -18,11 +18,12 @@ const Dashboard = () => {
   ];
 
   const sidebarMenu = [
+    { icon: "🏠", label: "Home" },
     { icon: "💬", label: "Chat" },
     { icon: "✍️", label: "Writer" },
     { icon: "👨‍💻", label: "Coder" },
     { icon: "🎨", label: "Imagine" },
-    { icon: "🏠", label: "Home" },
+
     { icon: "📚", label: "Library" },
     { icon: "🎙️", label: "Voiceover" },
   ];

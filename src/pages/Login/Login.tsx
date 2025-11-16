@@ -7,6 +7,7 @@ import {
 } from "@/firebase/firebase.config";
 import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { Eye, EyeOff, Lock, LogIn, Mail } from "lucide-react";
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -28,20 +29,32 @@ if (typeof window !== "undefined") {
 }
 
 export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
   // ✅ Custom admin email
   const adminEmail = "tapplix@gmail.com";
 
   const redirectBasedOnRole = (userEmail: string) => {
+    console.log("🔀 Redirecting based on role:", {
+      userEmail,
+      adminEmail,
+      isAdmin: userEmail === adminEmail,
+    });
+
     if (userEmail === adminEmail) {
-      navigate("/dashboard");
+      console.log("🔑 Admin detected, redirecting to /dashboard");
+      setTimeout(() => {
+        navigate("/dashboard", { replace: true });
+      }, 500); // একটু delay দিন যাতে auth state update হয়
     } else {
-      navigate("/");
+      console.log("👤 Regular user, redirecting to /");
+      setTimeout(() => {
+        navigate("/", { replace: true });
+      }, 500);
     }
   };
 
@@ -60,6 +73,7 @@ export default function Login() {
       const docSnap = await getDoc(userRef);
 
       if (!docSnap.exists()) {
+        const role = user.email === adminEmail ? "admin" : "user";
         await setDoc(
           userRef,
           {
@@ -67,7 +81,7 @@ export default function Login() {
             name: user.displayName || "Unknown",
             email: user.email,
             photoURL: user.photoURL || "",
-            role: user.email === adminEmail ? "admin" : "user",
+            role: role,
             status: "active",
             verified: user.emailVerified,
             country: "Unknown",
@@ -76,12 +90,18 @@ export default function Login() {
           },
           { merge: true }
         );
+        console.log("✅ User created with role:", role);
+      } else {
+        console.log(
+          "✅ Existing user logged in with role:",
+          docSnap.data()?.role
+        );
       }
 
       toast.success("✅ Login successful!");
       redirectBasedOnRole(user.email || "");
     } catch (error: any) {
-      console.error("Login error:", error);
+      console.error("❌ Login error:", error);
       if (error.code === "auth/invalid-email") {
         toast.error("Invalid email address.");
       } else if (error.code === "auth/user-not-found") {
@@ -97,6 +117,7 @@ export default function Login() {
       setLoading(false);
     }
   };
+
   const handleSocialLogin = async (providerName: string) => {
     setLoading(true);
     try {
@@ -110,7 +131,7 @@ export default function Login() {
           break;
         case "GitHub":
           provider = githubProvider;
-
+          break;
         default:
           throw new Error("Invalid provider");
       }
@@ -122,30 +143,66 @@ export default function Login() {
       const docSnap = await getDoc(userRef);
 
       if (!docSnap.exists()) {
+        let firebasePhotoURL = user.photoURL || "";
+
+        // ✅ Google photo কে Firebase Storage এ upload করুন (429 error fix)
+        if (user.photoURL && user.photoURL.includes("googleusercontent.com")) {
+          try {
+            console.log(
+              "📸 Uploading Google profile photo to Firebase Storage..."
+            );
+            const response = await fetch(user.photoURL);
+            const blob = await response.blob();
+
+            const storage = getStorage();
+            const storageRef = ref(storage, `profile-images/${user.uid}.jpg`);
+            await uploadBytes(storageRef, blob);
+            firebasePhotoURL = await getDownloadURL(storageRef);
+            console.log(
+              "✅ Photo uploaded successfully to Firebase:",
+              firebasePhotoURL
+            );
+          } catch (uploadError) {
+            console.error("❌ Photo upload error:", uploadError);
+            // Error হলে original URL ই use করুন
+            firebasePhotoURL = user.photoURL;
+          }
+        }
+
+        const role = user.email === adminEmail ? "admin" : "user";
+
         await setDoc(userRef, {
           uid: user.uid,
           name: user.displayName || "Unknown",
-          email: user.email,
-          photoURL: user.photoURL || "",
-          role: user.email === adminEmail ? "admin" : "user",
+          email: user.email || "",
+          photoURL: firebasePhotoURL, // ✅ Firebase Storage URL save হচ্ছে
+          role: role,
           status: "active",
           verified: user.emailVerified,
           country: "Unknown",
           createdAt: serverTimestamp(),
           updatedAt: serverTimestamp(),
         });
+
+        console.log("✅ New user created with role:", role);
+        console.log("📸 Photo URL saved:", firebasePhotoURL);
       } else {
+        // ✅ Existing user - শুধু updatedAt update করুন
         await setDoc(
           userRef,
           { updatedAt: serverTimestamp() },
           { merge: true }
         );
+        const userData = docSnap.data();
+        console.log("✅ Existing user logged in");
+        console.log("👤 User role:", userData?.role);
+        console.log("📸 Photo URL:", userData?.photoURL);
       }
 
       toast.success(`✅ Logged in with ${providerName}!`);
       redirectBasedOnRole(user.email || "");
     } catch (error: any) {
-      console.error(`${providerName} login error:`, error);
+      console.error(`❌ ${providerName} login error:`, error);
       if (error.code === "auth/popup-closed-by-user") {
         toast.warn("Popup closed. Try again.");
       } else if (
@@ -155,7 +212,7 @@ export default function Login() {
           "Account exists with this email using a different provider."
         );
       } else if (error.code === "auth/cancelled-popup-request") {
-        return;
+        return; // Silent fail for cancelled popups
       } else {
         toast.error(`Login failed with ${providerName}.`);
       }

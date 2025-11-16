@@ -10,7 +10,6 @@ import {
   Image,
   MessageCircle,
   Mic,
-  Sliders,
   Volume2,
 } from "lucide-react";
 
@@ -51,7 +50,7 @@ const Sidebar: React.FC<SidebarProps> = ({
       name: "Voiceover",
       icon: <Volume2 className="w-3 h-3" />,
       color: "bg-lime-400",
-    }
+    },
   ];
 
   return (
@@ -83,7 +82,7 @@ const Sidebar: React.FC<SidebarProps> = ({
             key={idx}
             className="flex items-center gap-3 hover:text-foreground cursor-pointer"
           >
-            <span>{item.icon}</span>
+            {!collapsed && <div className="text-2xl">{item.icon}</div>}
             {!collapsed && <span>{item.label}</span>}
           </li>
         ))}

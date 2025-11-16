@@ -1,20 +1,27 @@
 import { Button } from "@/components/ui/button";
-import { auth } from "../../firebase/firebase.config"; // Adjust path to your firebase config
-// Import the auth hook
 import { useAuth } from "@/context/AuthContext";
 import { useTheme } from "@/pages/HomePage/ThemeProvider";
 import { signOut } from "firebase/auth";
 import { LogOut, Moon, Settings, Sun, User } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
+import { auth } from "../../firebase/firebase.config";
 
 const Navbar = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isShadow, setIsShadow] = useState(false);
-  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+  const [isShadow, setIsShadow] = useState<boolean>(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState<boolean>(false);
   const { theme, toggleTheme } = useTheme();
   const { user, userData, loading } = useAuth();
   const navigate = useNavigate();
+
+  // ✅ Check if user is admin
+  const isAdmin = useMemo(() => userData?.role === "admin", [userData?.role]);
+
+  // ✅ Memoize profile image to prevent unnecessary re-renders
+  const profileImage = useMemo(() => {
+    return userData?.photoURL || userData?.profileImage || null;
+  }, [userData?.photoURL, userData?.profileImage]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -24,10 +31,12 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close dropdown when clicking outside
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (isUserMenuOpen && !event.target.closest(".user-menu-container")) {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        isUserMenuOpen &&
+        !(event.target as Element).closest(".user-menu-container")
+      ) {
         setIsUserMenuOpen(false);
       }
     };
@@ -45,7 +54,7 @@ const Navbar = () => {
     }
   };
 
-  const getUserInitials = () => {
+  const getUserInitials = (): string => {
     if (userData?.name) {
       return userData.name
         .split(" ")
@@ -65,7 +74,7 @@ const Navbar = () => {
     >
       <div className="container-custom flex items-center justify-between">
         {/* Logo */}
-        <div className="flex items-center">
+        <div className="flex items-center flex-shrink-0">
           {theme === "light" ? (
             <img src="/light-nav-logo.png" alt="Ebonix" className="h-10" />
           ) : (
@@ -74,9 +83,14 @@ const Navbar = () => {
         </div>
 
         {/* Desktop Navigation */}
-        <div className="hidden lg:flex justify-center items-center space-x-12">
-          <NavLinks />
-          <div className="flex items-center space-x-6">
+        <div className="hidden lg:flex items-center flex-1 justify-between ml-12">
+          {/* Nav Links - Centered */}
+          <div className="flex items-center space-x-8 flex-1 justify-center">
+            <NavLinks isAdmin={isAdmin} />
+          </div>
+
+          {/* Right Side Actions */}
+          <div className="flex items-center space-x-4 flex-shrink-0">
             <Button
               variant="ghost"
               size="icon"
@@ -100,17 +114,31 @@ const Navbar = () => {
                       onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
                       className="flex items-center space-x-3 hover:opacity-80 transition-opacity"
                     >
-                      {userData?.photoURL || userData?.profileImage ? (
+                      {profileImage ? (
                         <img
-                          src={userData.photoURL || userData.profileImage}
-                          alt={userData.name || "User"}
-                          className="h-10 w-10 rounded-full object-cover border-2 border-para"
+                          src={profileImage}
+                          alt={userData?.name || "User"}
+                          className="h-10 w-10 rounded-full object-cover"
+                          loading="lazy"
+                          onError={(
+                            e: React.SyntheticEvent<HTMLImageElement>
+                          ) => {
+                            const target = e.target as HTMLImageElement;
+                            target.style.display = "none";
+                            const nextElement =
+                              target.nextElementSibling as HTMLElement;
+                            if (nextElement) {
+                              nextElement.style.display = "flex";
+                            }
+                          }}
                         />
-                      ) : (
-                        <div className="h-10 w-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-semibold border-2 border-para">
-                          {getUserInitials()}
-                        </div>
-                      )}
+                      ) : null}
+                      <div
+                        className="h-10 w-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-semibold"
+                        style={{ display: profileImage ? "none" : "flex" }}
+                      >
+                        {getUserInitials()}
+                      </div>
                       <span className="text-foreground font-medium">
                         {userData?.name || user.email?.split("@")[0]}
                       </span>
@@ -119,22 +147,17 @@ const Navbar = () => {
                     {/* User Dropdown Menu */}
                     {isUserMenuOpen && (
                       <div className="absolute right-0 mt-2 w-56 bg-background border border-para rounded-lg shadow-xl py-2 animate-in fade-in slide-in-from-top-2 duration-200">
-                        <div className="px-4 py-3 border-b border-para">
-                          <p className="text-sm font-medium text-foreground">
-                            {userData?.name || "User"}
-                          </p>
-                          <p className="text-xs text-para truncate">
-                            {user.email}
-                          </p>
-                        </div>
-                        <Link
-                          to="/dashboard"
-                          className="flex items-center px-4 py-2 text-sm text-foreground hover:bg-para/10 transition-colors"
-                          onClick={() => setIsUserMenuOpen(false)}
-                        >
-                          <User className="h-4 w-4 mr-3" />
-                          Dashboard
-                        </Link>
+                        {/* ✅ Show Dashboard only for admin */}
+                        {isAdmin && (
+                          <Link
+                            to="/dashboard"
+                            className="flex items-center px-4 py-2 text-sm text-foreground hover:bg-para/10 transition-colors"
+                            onClick={() => setIsUserMenuOpen(false)}
+                          >
+                            <User className="h-4 w-4 mr-3" />
+                            Dashboard
+                          </Link>
+                        )}
                         <Link
                           to="/settings"
                           className="flex items-center px-4 py-2 text-sm text-foreground hover:bg-para/10 transition-colors"
@@ -154,7 +177,7 @@ const Navbar = () => {
                     )}
                   </div>
                 ) : (
-                  <>
+                  <div className="flex items-center space-x-3">
                     <Link to="/login">
                       <Button className="bg-background text-foreground border border-para rounded-md font-medium px-6 hover:text-white text-base">
                         Login
@@ -165,7 +188,7 @@ const Navbar = () => {
                         Get Started
                       </Button>
                     </Link>
-                  </>
+                  </div>
                 )}
               </>
             )}
@@ -173,7 +196,7 @@ const Navbar = () => {
         </div>
 
         {/* Mobile menu button */}
-        <div className="lg:hidden flex items-center space-x-2">
+        <div className="lg:hidden flex items-center space-x-3">
           <Button
             variant="ghost"
             size="icon"
@@ -187,6 +210,39 @@ const Navbar = () => {
             )}
             <span className="sr-only">Toggle theme</span>
           </Button>
+
+          {/* User avatar for mobile */}
+          {!loading && user && (
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="flex items-center"
+            >
+              {profileImage ? (
+                <img
+                  src={profileImage}
+                  alt={userData?.name || "User"}
+                  className="h-9 w-9 rounded-full object-cover"
+                  loading="lazy"
+                  onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
+                    const target = e.target as HTMLImageElement;
+                    target.style.display = "none";
+                    const nextElement =
+                      target.nextElementSibling as HTMLElement;
+                    if (nextElement) {
+                      nextElement.style.display = "flex";
+                    }
+                  }}
+                />
+              ) : null}
+              <div
+                className="h-9 w-9 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-semibold text-sm"
+                style={{ display: profileImage ? "none" : "flex" }}
+              >
+                {getUserInitials()}
+              </div>
+            </button>
+          )}
+
           <button
             className="flex items-center"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -205,7 +261,7 @@ const Navbar = () => {
               ></span>
               <span
                 className={`block w-8 h-0.5 bg-foreground transition-all duration-300 ${
-                  isMenuOpen ? "-rotate-45" : ""
+                  isMenuOpen ? "-rotate-45 -translate-y-2.5" : ""
                 }`}
               ></span>
             </div>
@@ -217,65 +273,54 @@ const Navbar = () => {
       <div
         className={`lg:hidden absolute w-full bg-background border-t border-ebonix-gray-medium transition-all duration-300 ${
           isMenuOpen
-            ? "max-h-96 py-6 opacity-100"
+            ? "max-h-[500px] py-6 opacity-100"
             : "max-h-0 overflow-hidden opacity-0"
         }`}
       >
-        <div className="container-custom flex flex-col space-y-6">
-          {!loading && user && (
-            <div className="flex items-center space-x-3 pb-4 border-b border-para">
-              {userData?.photoURL || userData?.profileImage ? (
-                <img
-                  src={userData.photoURL || userData.profileImage}
-                  alt={userData.name || "User"}
-                  className="h-12 w-12 rounded-full object-cover border-2 border-para"
-                />
-              ) : (
-                <div className="h-12 w-12 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-semibold border-2 border-para">
-                  {getUserInitials()}
-                </div>
-              )}
-              <div>
-                <p className="text-foreground font-medium">
-                  {userData?.name || user.email?.split("@")[0]}
-                </p>
-                <p className="text-xs text-para truncate">{user.email}</p>
-              </div>
-            </div>
-          )}
-
-          <div className="flex flex-col space-y-3">
-            <NavLinks />
+        <div className="container-custom flex flex-col space-y-6 shadow-xl">
+          <div className="flex flex-col space-y-4">
+            <NavLinks mobile isAdmin={isAdmin} />
             {!loading && (
               <>
                 {user ? (
                   <>
+                    {/* ✅ Show Dashboard only for admin */}
+                    {isAdmin && (
+                      <Link
+                        to="/dashboard"
+                        className="text-foreground hover:text-ebonix-purple-light transition-colors py-2"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        Dashboard
+                      </Link>
+                    )}
                     <Link
                       to="/settings"
-                      className="text-foreground hover:text-ebonix-purple-light transition-colors"
+                      className="text-foreground hover:text-ebonix-purple-light transition-colors py-2"
+                      onClick={() => setIsMenuOpen(false)}
                     >
                       Settings
                     </Link>
                     <button
                       onClick={handleLogout}
-                      className="text-red-500 hover:text-red-600 transition-colors text-left"
+                      className="text-red-500 hover:text-red-600 transition-colors text-left py-2"
                     >
                       Logout
                     </button>
                   </>
                 ) : (
-                  <>
-                    <Link to="/login">
+                  <div className="flex flex-col space-y-3 pt-2">
+                    <Link to="/login" onClick={() => setIsMenuOpen(false)}>
                       <Button className="bg-background text-foreground border border-para rounded-md font-medium px-6 hover:text-white text-base w-full">
                         Login
                       </Button>
                     </Link>
-                    <Link to="/signup">
+                    <Link to="/signup" onClick={() => setIsMenuOpen(false)}>
                       <Button className="gradient-bg font-medium w-full">
                         Get Started
                       </Button>
                     </Link>
-                  </>
+                  </div>
                 )}
               </>
             )}
@@ -286,18 +331,27 @@ const Navbar = () => {
   );
 };
 
-const NavLinks = () => {
+interface NavLinksProps {
+  mobile?: boolean;
+  isAdmin?: boolean;
+}
+
+const NavLinks = ({ mobile = false, isAdmin = false }: NavLinksProps) => {
   const { theme } = useTheme();
-  const linkClass =
-    theme === "dark"
-      ? "text-ebonix-white hover:text-ebonix-purple-light transition-colors"
-      : "text-ebonix-black hover:text-ebonix-purple transition-colors";
+  const linkClass = mobile
+    ? "text-foreground hover:text-ebonix-purple-light transition-colors py-2"
+    : theme === "dark"
+    ? "text-ebonix-white hover:text-ebonix-purple-light transition-colors"
+    : "text-ebonix-black hover:text-ebonix-purple transition-colors";
 
   return (
     <>
-      <NavLink to="/dashboard" className={linkClass}>
-        Dashboard
-      </NavLink>
+      {/* ✅ Dashboard link শুধু admin দের জন্য */}
+      {isAdmin && (
+        <NavLink to="/dashboard" className={linkClass}>
+          Dashboard
+        </NavLink>
+      )}
       <NavLink to="#" className={linkClass}>
         Product
       </NavLink>

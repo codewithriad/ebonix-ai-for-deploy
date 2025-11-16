@@ -1,5 +1,3 @@
-// File: Signup.tsx
-
 import {
   auth,
   db,
@@ -9,10 +7,12 @@ import {
 } from "@/firebase/firebase.config";
 import {
   createUserWithEmailAndPassword,
+  User as FirebaseUser,
   signInWithPopup,
   updateProfile,
 } from "firebase/auth";
 import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { Eye, EyeOff, Lock, Mail, User, UserPlus } from "lucide-react";
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -20,31 +20,64 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function Signup() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [name, setName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
+  // ✅ Admin email check
+  const adminEmail = "tapplix@gmail.com";
+
   // 🔹 Create Firestore user if not exists
-  const createUserIfNotExists = async (user: any, displayName?: string) => {
+  const createUserIfNotExists = async (
+    user: FirebaseUser,
+    displayName?: string
+  ) => {
     const userRef = doc(db, "users", user.uid);
     const userSnap = await getDoc(userRef);
 
     if (!userSnap.exists()) {
+      let firebasePhotoURL = user.photoURL || "";
+
+      // ✅ Google photo কে Firebase Storage এ upload করুন
+      if (user.photoURL && user.photoURL.includes("googleusercontent.com")) {
+        try {
+          console.log("📸 Uploading profile photo to Firebase Storage...");
+          const response = await fetch(user.photoURL);
+          const blob = await response.blob();
+
+          const storage = getStorage();
+          const storageRef = ref(storage, `profile-images/${user.uid}.jpg`);
+          await uploadBytes(storageRef, blob);
+          firebasePhotoURL = await getDownloadURL(storageRef);
+          console.log("✅ Photo uploaded successfully:", firebasePhotoURL);
+        } catch (uploadError) {
+          console.error("❌ Photo upload error:", uploadError);
+          firebasePhotoURL = user.photoURL;
+        }
+      }
+
+      const role = user.email === adminEmail ? "admin" : "user";
+
       await setDoc(userRef, {
         uid: user.uid,
         name: displayName || user.displayName || "Unknown",
-        email: user.email,
-        photoURL: user.photoURL || "",
-        role: "user", // default role
+        email: user.email || "",
+        photoURL: firebasePhotoURL,
+        role: role,
         status: "active",
         verified: user.emailVerified,
         country: "Unknown",
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       });
+
+      console.log("✅ User created with role:", role);
+      console.log("📸 Photo URL:", firebasePhotoURL);
+    } else {
+      console.log("✅ User already exists");
     }
   };
 
@@ -71,9 +104,17 @@ export default function Signup() {
       await createUserIfNotExists(user, name);
 
       toast.success("Account created successfully!");
-      navigate("/dashboard");
+
+      // ✅ Redirect based on role
+      if (user.email === adminEmail) {
+        console.log("🔑 Admin account created, redirecting to dashboard");
+        navigate("/dashboard");
+      } else {
+        console.log("👤 User account created, redirecting to home");
+        navigate("/");
+      }
     } catch (error: any) {
-      console.error("Signup Error:", error);
+      console.error("❌ Signup Error:", error);
       if (error.code === "auth/email-already-in-use") {
         toast.error("Already have an account with this email.");
       } else if (error.code === "auth/weak-password") {
@@ -112,11 +153,21 @@ export default function Signup() {
       await createUserIfNotExists(user);
 
       toast.success(`✅ ${providerName} signup successful!`);
-      navigate("/dashboard");
+
+      // ✅ Redirect based on role
+      if (user.email === adminEmail) {
+        console.log("🔑 Admin logged in, redirecting to dashboard");
+        navigate("/dashboard");
+      } else {
+        console.log("👤 User logged in, redirecting to home");
+        navigate("/");
+      }
     } catch (error: any) {
-      console.error("Social Signup Error:", error);
+      console.error("❌ Social Signup Error:", error);
       if (error.code === "auth/popup-closed-by-user") {
         toast.warn("Signup popup closed before completion.");
+      } else if (error.code === "auth/cancelled-popup-request") {
+        return; // Silent fail
       } else {
         toast.error(`${providerName} signup failed. Please try again.`);
       }
