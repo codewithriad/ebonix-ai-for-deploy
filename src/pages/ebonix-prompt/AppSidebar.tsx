@@ -34,14 +34,6 @@ import React, { useEffect, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { ThemeToggle } from "./ThemeToggle";
 import ebonixLogoDark from "/dark-nav-logo.png";
-import ChatBubbleLeftRightIcon from "/dashboard/chat.svg";
-import Home from "/dashboard/home.svg";
-import Imagine from "/dashboard/imagine.svg";
-import Library from "/dashboard/library.svg";
-import Modal from "/dashboard/modal.svg";
-import Video from "/dashboard/play.svg";
-import Search from "/dashboard/search1.svg";
-import Setting from "/dashboard/setting.svg";
 import ebonixLogoLight from "/light-nav-logo.png";
 
 interface ChatHistory {
@@ -157,42 +149,38 @@ export function AppSidebar({
   const menuItems = [
     {
       name: "Home",
-      icon: Home,
+      icon: "/dashboard/home.svg",
       link: "/app",
     },
     {
       name: "Explore",
-      icon: Search,
+      icon: "/dashboard/search1.svg",
       link: "/app/explore",
     },
     {
       name: "Modals",
-      icon: Modal,
+      icon: "/dashboard/modal.svg",
       link: "/app/modals",
     },
     {
       name: "Library",
-      icon: Library,
+      icon: "/dashboard/library.svg",
       link: "/app/library",
     },
-    {
-      name: "Chat",
-      icon: ChatBubbleLeftRightIcon,
-      link: "/app/chat",
-    },
+    { name: "Chat", icon: "/dashboard/chat.svg", link: "/app/chat" },
     {
       name: "Image Generator",
-      icon: Imagine,
+      icon: "/dashboard/imagine.svg",
       link: "/app/imagine",
     },
     {
       name: "Video Generator",
-      icon: Video,
+      icon: "/dashboard/play.svg",
       link: "/app/video",
     },
     {
       name: "Settings",
-      icon: Setting,
+      icon: "/dashboard/setting.svg",
       link: "/app/settings",
     },
   ];
