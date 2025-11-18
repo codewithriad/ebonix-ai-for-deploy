@@ -222,14 +222,14 @@ export function AppSidebar({
       {/* Content */}
       <SidebarContent className="overflow-y-auto px-3 py-6">
         <SidebarGroup>
-          <nav className="space-y-2">
+          <nav className="space-y-6">
             {menuItems.map((app) => (
               <SidebarMenuItem key={app.name} className="list-none">
                 <SidebarMenuButton asChild>
                   <NavLink
                     to={app.link}
                     className={({ isActive }) =>
-                      `group relative flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all duration-300 overflow-hidden ${
+                      `group relative flex items-center gap-4 px-4 py-4 rounded-xl transition-all duration-300 overflow-hidden ${
                         isActive
                           ? "bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold shadow-lg shadow-blue-500/30 scale-[1.02]"
                           : "text-gray-700 dark:text-gray-300 hover:bg-gradient-to-r hover:from-gray-100 hover:to-gray-50 dark:hover:from-gray-800 dark:hover:to-gray-800/80 hover:text-gray-900 dark:hover:text-gray-100 hover:shadow-md hover:scale-[1.02]"
@@ -245,7 +245,7 @@ export function AppSidebar({
                       className="h-6 w-6 object-contain flex-shrink-0 opacity-75 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300 relative z-10"
                     />
                     {!collapsed && (
-                      <span className="text-lg font-medium truncate relative z-10 text-foreground">
+                      <span className="text-base font-medium truncate relative z-10 text-foreground">
                         {app.name}
                       </span>
                     )}

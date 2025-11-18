@@ -16,8 +16,6 @@ import ModalsPage from "./pages/ebonix-prompt/Models/ModalsPage";
 import SettingsPage from "./pages/ebonix-prompt/Setting/SettingPage";
 import Imagine from "./pages/ebonix-prompt/Sidebar/Imagine";
 import Video from "./pages/ebonix-prompt/Sidebar/Video";
-import VoiceIsolotor from "./pages/ebonix-prompt/Sidebar/VoiceIsolotor";
-import Voiceover from "./pages/ebonix-prompt/Sidebar/Voiceover";
 import ProtectedRoute from "./routes/ProtectedRoute";
 
 const Login = lazy(() => import("./pages/Login/Login"));
@@ -46,11 +44,6 @@ const App = React.memo(() => (
           >
             <Routes>
               <Route path="/" element={<Index />} />
-              <Route path="/app" element={<EbonixAiHome />} />
-              <Route path="/app/explore" element={<ExplorePage />} />
-              <Route path="app/library" element={<LibraryPage />} />
-              <Route path="app/modals" element={<ModalsPage />} />
-              <Route path="app/settings" element={<SettingsPage />} />
 
               {/* only admin can visit dashboard */}
               <Route
@@ -84,12 +77,14 @@ const App = React.memo(() => (
               <Route path="/signUp" element={<SignUp />} />
 
               {/* routes for ebonix ai tools */}
+              <Route path="/app" element={<EbonixAiHome />} />
+              <Route path="/app/explore" element={<ExplorePage />} />
+              <Route path="app/library" element={<LibraryPage />} />
+              <Route path="app/modals" element={<ModalsPage />} />
+              <Route path="app/settings" element={<SettingsPage />} />
               <Route path="app/chat" element={<EbonixPrompt />} />
               <Route path="app/imagine" element={<Imagine />} />
               <Route path="app/video" element={<Video />} />
-
-              <Route path="app/voiceover" element={<Voiceover />} />
-              <Route path="app/voice-isolator" element={<VoiceIsolotor />} />
             </Routes>
           </Suspense>
         </BrowserRouter>
