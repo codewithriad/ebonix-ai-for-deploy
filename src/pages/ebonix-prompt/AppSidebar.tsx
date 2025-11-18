@@ -149,7 +149,7 @@ export function AppSidebar({
   const menuItems = [
     {
       name: "Home",
-      icon: "/dashboard/home.svg",
+      icon: "/dashboard/app.svg",
       link: "/app",
     },
     {
