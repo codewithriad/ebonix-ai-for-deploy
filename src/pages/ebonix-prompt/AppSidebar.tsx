@@ -163,7 +163,7 @@ export function AppSidebar({
     {
       name: "Explore",
       icon: Search,
-      link: "/app/search",
+      link: "/app/explore",
     },
     {
       name: "Modals",
@@ -257,7 +257,7 @@ export function AppSidebar({
                       className="h-6 w-6 object-contain flex-shrink-0 opacity-75 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300 relative z-10"
                     />
                     {!collapsed && (
-                      <span className="text-[15px] font-medium truncate relative z-10">
+                      <span className="text-lg font-medium truncate relative z-10 text-foreground">
                         {app.name}
                       </span>
                     )}

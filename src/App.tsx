@@ -8,18 +8,16 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import AllUsersPage from "./pages/Dashboard/AllUsers";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import AllOrders from "./pages/Dashboard/shared/AllOrders";
+import EbonixAiHome from "./pages/ebonix-prompt/EbonixAiHome";
 import EbonixPrompt from "./pages/ebonix-prompt/EbonixPrompt";
+import ExplorePage from "./pages/ebonix-prompt/Explore/ExplorePage";
 import LibraryPage from "./pages/ebonix-prompt/Library/Library";
 import ModalsPage from "./pages/ebonix-prompt/Models/ModalsPage";
-import Chat from "./pages/ebonix-prompt/Tools/Chat";
-import Classifier from "./pages/ebonix-prompt/Tools/Classifier";
-import Coder from "./pages/ebonix-prompt/Tools/Coder";
-import Imagine from "./pages/ebonix-prompt/Tools/Imagine";
-import Transcriber from "./pages/ebonix-prompt/Tools/Transcriber";
-import Video from "./pages/ebonix-prompt/Tools/Video";
-import VoiceIsolotor from "./pages/ebonix-prompt/Tools/VoiceIsolotor";
-import Voiceover from "./pages/ebonix-prompt/Tools/Voiceover";
-import Writer from "./pages/ebonix-prompt/Tools/Writer";
+import SettingsPage from "./pages/ebonix-prompt/Setting/SettingPage";
+import Imagine from "./pages/ebonix-prompt/Sidebar/Imagine";
+import Video from "./pages/ebonix-prompt/Sidebar/Video";
+import VoiceIsolotor from "./pages/ebonix-prompt/Sidebar/VoiceIsolotor";
+import Voiceover from "./pages/ebonix-prompt/Sidebar/Voiceover";
 import ProtectedRoute from "./routes/ProtectedRoute";
 
 const Login = lazy(() => import("./pages/Login/Login"));
@@ -48,11 +46,13 @@ const App = React.memo(() => (
           >
             <Routes>
               <Route path="/" element={<Index />} />
-              <Route path="/app" element={<EbonixPrompt />} />
+              <Route path="/app" element={<EbonixAiHome />} />
+              <Route path="/app/explore" element={<ExplorePage />} />
               <Route path="app/library" element={<LibraryPage />} />
               <Route path="app/modals" element={<ModalsPage />} />
+              <Route path="app/settings" element={<SettingsPage />} />
 
-              {/* 🔐 only admin can visit dashboard */}
+              {/* only admin can visit dashboard */}
               <Route
                 path="/dashboard"
                 element={
@@ -84,15 +84,12 @@ const App = React.memo(() => (
               <Route path="/signUp" element={<SignUp />} />
 
               {/* routes for ebonix ai tools */}
-              <Route path="app/chat" element={<Chat />} />
-              <Route path="app/writer" element={<Writer />} />
-              <Route path="app/coder" element={<Coder />} />
+              <Route path="app/chat" element={<EbonixPrompt />} />
               <Route path="app/imagine" element={<Imagine />} />
               <Route path="app/video" element={<Video />} />
-              <Route path="app/transcriber" element={<Transcriber />} />
+
               <Route path="app/voiceover" element={<Voiceover />} />
               <Route path="app/voice-isolator" element={<VoiceIsolotor />} />
-              <Route path="app/classifier" element={<Classifier />} />
             </Routes>
           </Suspense>
         </BrowserRouter>
