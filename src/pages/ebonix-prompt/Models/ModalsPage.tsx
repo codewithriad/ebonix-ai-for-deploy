@@ -3,6 +3,7 @@ import { Search, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { AppSidebar } from "../AppSidebar";
+import { ChatHeader } from "../ChatHeader";
 
 interface Model {
   id: string;
@@ -250,6 +251,9 @@ export default function ModalsPage() {
             overflow-y-auto
           "
         >
+          <div className="block md:hidden">
+            <ChatHeader />
+          </div>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div className="mb-8">
               <NavLink to={"/app"}>

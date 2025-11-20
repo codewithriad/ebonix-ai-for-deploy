@@ -96,16 +96,6 @@ export default {
           "gray-light": "#94A3B8",
           white: "#F8FAFC",
         },
-        sidebar: {
-          DEFAULT: "hsl(var(--sidebar-background))",
-          foreground: "hsl(var(--sidebar-foreground))",
-          primary: "hsl(var(--sidebar-primary))",
-          "primary-foreground": "hsl(var(--sidebar-primary-foreground))",
-          accent: "hsl(var(--sidebar-accent))",
-          "accent-foreground": "hsl(var(--sidebar-accent-foreground))",
-          border: "hsl(var(--sidebar-border))",
-          ring: "hsl(var(--sidebar-ring))",
-        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -159,9 +149,9 @@ export default {
             opacity: "1",
           },
         },
-        'bounce-y': {
-          '0%, 100%': { transform: 'translateY(0)' },
-          '50%': { transform: 'translateY(-10px)' }, // adjust height here
+        "bounce-y": {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-10px)" }, // adjust height here
         },
       },
       animation: {
@@ -169,9 +159,9 @@ export default {
         "accordion-up": "accordion-up 0.2s ease-out",
         "fade-in": "fade-in 0.5s ease-out",
         "scale-in": "scale-in 0.3s ease-out",
-        'bounce-y': 'bounce-y 2s infinite ease-in-out',
+        "bounce-y": "bounce-y 2s infinite ease-in-out",
       },
     },
   },
-  plugins: [require("tailwindcss-animate"),require('tailwind-scrollbar-hide')],
+  plugins: [require("tailwindcss-animate"), require("tailwind-scrollbar-hide")],
 } satisfies Config;

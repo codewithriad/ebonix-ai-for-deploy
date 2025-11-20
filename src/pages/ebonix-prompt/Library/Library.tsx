@@ -13,6 +13,7 @@ import {
   Volume2,
 } from "lucide-react";
 import { NavLink } from "react-router-dom";
+import { ChatHeader } from "../ChatHeader";
 
 const cards = [
   {
@@ -93,6 +94,9 @@ export default function LibraryPage() {
             overflow-y-auto
           "
         >
+          <div className="block md:hidden">
+            <ChatHeader />
+          </div>
           <div className="max-w-[1800px] mx-auto">
             {/* Header */}
             <div className="mb-8">

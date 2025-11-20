@@ -1,18 +1,18 @@
-import CoolestFeatures from "@/pages/HomePage/CoolestFeatures";
 import Dashboard from "@/components/Dashboard/Dashboard";
 import WhatItWork from "@/components/Dashboard/WhatItWork";
 import ChatWidget from "@/components/Fixed/ChatWidget";
 
+import Footer from "@/components/Shared/Footer";
+import Navbar from "@/components/Shared/Navbar";
 import MarketingTeam from "@/pages/HomePage/MarketingTeam";
 import PricingSection from "@/pages/HomePage/PricingSection";
 import TestimonialsSection from "@/pages/HomePage/TestimonialsSection";
 import React from "react";
 import AiDemoComingSoon from "./HomePage/AiDemoComingSoon";
-import TextToVoice from "./HomePage/TextToVoice";
-import Navbar from "@/components/Shared/Navbar";
 import GetStartedSection from "./HomePage/GetStartedSection";
 import HeroSection from "./HomePage/HeroSection";
-import Footer from "@/components/Shared/Footer";
+import PromptFeature from "./HomePage/Prompt/PromptFeature";
+import TextToVoice from "./HomePage/TextToVoice";
 
 const Index = React.memo(() => {
   return (
@@ -25,7 +25,7 @@ const Index = React.memo(() => {
         <TextToVoice />
         <MarketingTeam />
         <WhatItWork />
-        <CoolestFeatures />
+        <PromptFeature />
         <PricingSection />
         <TestimonialsSection />
         <GetStartedSection />

@@ -10,12 +10,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import {
   Sidebar,
-  SidebarContent,
   SidebarFooter,
-  SidebarGroup,
   SidebarHeader,
   SidebarMenuButton,
-  SidebarMenuItem,
   SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar";
@@ -31,7 +28,8 @@ import {
   User,
 } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { NavLink } from "./NavLink";
 import { ThemeToggle } from "./ThemeToggle";
 import ebonixLogoDark from "/dark-nav-logo.png";
 import ebonixLogoLight from "/light-nav-logo.png";
@@ -205,11 +203,13 @@ export function AppSidebar({
         <div className="flex items-center justify-between w-full gap-3">
           {!collapsed && (
             <div className="flex items-center gap-3 flex-1 min-w-0">
-              <img
-                src={theme === "dark" ? ebonixLogoDark : ebonixLogoLight}
-                alt="EbonixAI"
-                className="h-7 w-auto flex-shrink-0"
-              />
+              <NavLink to="/">
+                <img
+                  src={theme === "dark" ? ebonixLogoDark : ebonixLogoLight}
+                  alt="EbonixAI"
+                  className="h-7 w-auto flex-shrink-0"
+                />
+              </NavLink>
             </div>
           )}
           <div className="flex items-center gap-2">
@@ -219,43 +219,100 @@ export function AppSidebar({
         </div>
       </SidebarHeader>
 
-      {/* Content */}
-      <SidebarContent className="overflow-y-auto px-3 py-6">
-        <SidebarGroup>
-          <nav className="space-y-6">
-            {menuItems.map((app) => (
-              <SidebarMenuItem key={app.name} className="list-none">
-                <SidebarMenuButton asChild>
-                  <NavLink
-                    to={app.link}
-                    className={({ isActive }) =>
-                      `group relative flex items-center gap-4 px-4 py-4 rounded-xl transition-all duration-300 overflow-hidden ${
-                        isActive
-                          ? "bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold shadow-lg shadow-blue-500/30 scale-[1.02]"
-                          : "text-gray-700 dark:text-gray-300 hover:bg-gradient-to-r hover:from-gray-100 hover:to-gray-50 dark:hover:from-gray-800 dark:hover:to-gray-800/80 hover:text-gray-900 dark:hover:text-gray-100 hover:shadow-md hover:scale-[1.02]"
-                      } ${collapsed ? "justify-center" : ""}`
-                    }
-                  >
-                    {/* Animated background on hover */}
-                    <span className="absolute inset-0 bg-gradient-to-r from-blue-400/0 to-indigo-400/0 group-hover:from-blue-400/10 group-hover:to-indigo-400/10 transition-all duration-300"></span>
+      {/* Navigation */}
+      <nav
+        className={`flex-1 overflow-y-auto ${
+          collapsed ? "p-2 space-y-2" : "p-4 space-y-2"
+        }`}
+      >
+        {menuItems.map((item) => {
+          const isActive = location.pathname === item.link;
 
-                    <img
-                      src={app.icon}
-                      alt={app.name}
-                      className="h-6 w-6 object-contain flex-shrink-0 opacity-75 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300 relative z-10"
-                    />
-                    {!collapsed && (
-                      <span className="text-base font-medium truncate relative z-10 text-foreground">
-                        {app.name}
-                      </span>
-                    )}
-                  </NavLink>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            ))}
-          </nav>
-        </SidebarGroup>
-      </SidebarContent>
+          return (
+            <NavLink
+              key={item.link}
+              to={item.link}
+              className={`
+                group relative flex items-center gap-3 px-4 py-3.5 rounded-xl
+                transition-all duration-300 ease-out overflow-hidden
+                ${collapsed ? "justify-center px-2" : ""}
+                ${
+                  isActive
+                    ? "bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 text-white shadow-lg shadow-blue-500/50 dark:shadow-blue-600/40 scale-[1.02]"
+                    : "text-gray-700 dark:text-gray-300 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 dark:hover:from-blue-950/30 dark:hover:to-indigo-950/30 hover:text-blue-700 dark:hover:text-blue-400 hover:shadow-md hover:shadow-blue-100/50 dark:hover:shadow-blue-900/20 hover:scale-[1.02] active:scale-[0.98]"
+                }
+              `}
+            >
+              {/* Animated gradient background overlay on hover */}
+              <span
+                className={`
+                absolute inset-0 opacity-0 transition-opacity duration-300
+                bg-gradient-to-r from-blue-400/10 via-indigo-400/10 to-blue-400/10
+                ${!isActive && "group-hover:opacity-100"}
+              `}
+              />
+
+              {/* Shimmer effect on hover */}
+              <span
+                className={`
+                absolute inset-0 -translate-x-full group-hover:translate-x-full
+                transition-transform duration-1000 ease-out
+                bg-gradient-to-r from-transparent via-white/20 to-transparent
+                ${!isActive && "group-hover:block"}
+              `}
+                style={{ width: "50%" }}
+              />
+
+              {/* Icon */}
+              <div
+                className={`
+                relative z-10 flex-shrink-0 transition-all duration-300
+                ${
+                  isActive
+                    ? "drop-shadow-sm"
+                    : "group-hover:scale-110 group-hover:rotate-3"
+                }
+              `}
+              >
+                <img
+                  src={item.icon}
+                  alt={`${item.name} icon`}
+                  className={`
+                    w-5 h-5 object-contain transition-all duration-300
+                    ${
+                      isActive
+                        ? "brightness-0 invert"
+                        : "opacity-75 group-hover:opacity-100"
+                    }
+                  `}
+                />
+              </div>
+
+              {/* Label */}
+              {!collapsed && (
+                <span
+                  className={`
+                  relative z-10 text-[15px] font-medium truncate transition-all duration-300
+                  ${isActive ? "font-semibold" : "group-hover:font-semibold"}
+                `}
+                >
+                  {item.name}
+                </span>
+              )}
+
+              {/* Active indicator dot (visible when collapsed) */}
+              {collapsed && isActive && (
+                <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-white rounded-full" />
+              )}
+
+              {/* Glow effect for active state */}
+              {isActive && (
+                <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-400/20 to-indigo-400/20 blur-sm" />
+              )}
+            </NavLink>
+          );
+        })}
+      </nav>
 
       {/* Footer */}
       <SidebarFooter className="p-3 border-t border-gray-200 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-900/50">

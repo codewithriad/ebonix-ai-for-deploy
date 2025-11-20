@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { NavLink } from "react-router-dom";
+import { ChatHeader } from "./ChatHeader";
 
 interface Message {
   id: string;
@@ -217,6 +218,9 @@ const EbonixAiHome = () => {
 
         {/* Main content */}
         <main className="flex-1 bg-gray-50 dark:bg-background text-foreground w-full min-h-screen overflow-y-auto">
+          <div className="block md:hidden">
+            <ChatHeader />
+          </div>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12">
             {/* Hero Section */}
             <div className="text-center mb-10 sm:mb-12 lg:mb-16 space-y-4 sm:space-y-6 animate-in fade-in duration-700">
