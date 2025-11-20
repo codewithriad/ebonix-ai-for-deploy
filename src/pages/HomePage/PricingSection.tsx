@@ -1,50 +1,62 @@
-import { Gem, Sun, Zap } from "lucide-react";
+import {
+  IconCircleCheckFilled,
+  IconDiamond,
+  IconSparkles,
+  IconStar,
+} from "@tabler/icons-react";
 
 export default function PricingSection() {
   const plans = [
     {
       name: "Basic",
       price: "$9",
-      description: "Perfect for individual developers.",
+      description: "Perfect for creators starting out",
       features: [
-        "Access to Starter Components",
-        "1 Project",
-        "Email Support",
-        "Basic Analytics",
+        "Access to Standard Templates",
+        "10,000 Word limit",
+        "5,000 Image limit",
+        "ChatGPT 3.5",
+        "Basic Support",
+        "10,000 Word Tokens",
+        "5,000 Image Tokens",
       ],
       button: "Get started",
       highlighted: false,
-      icon: <Zap className="w-6 h-6 text-foreground" />,
+      icon: <IconSparkles className="w-6 h-6 text-foreground" />,
     },
     {
       name: "Pro",
       price: "$19",
-      description: "Great for small teams and client work.",
+      description: "For professional creators",
       features: [
-        "Access to All Components",
-        "10 Projects",
-        "Priority Email Support",
-        "Full Analytics",
-        "Team Collaboration",
+        "Access to All Templates",
+        "30,000 Word limit",
+        "10,000 Image limit",
+        "ChatGPT 4",
+        "Support Priority",
+        "30,000 Word Tokens",
+        "10,000 Image Tokens",
       ],
       button: "Get started",
       highlighted: false,
-      icon: <Sun className="w-6 h-6 text-foreground" />,
+      icon: <IconStar className="w-6 h-6 text-foreground" />,
     },
     {
       name: "Pro Plus",
       price: "$29",
-      description: "Best for agencies and startups.",
+      description: "For content studios and agencies.",
       features: [
-        "Unlimited Projects",
-        "Custom Component Requests",
-        "1:1 Support",
-        "Advanced Analytics",
-        "Premium API Access",
+        "Access to All Templates",
+        "Unlimited Word limit",
+        "Unlimited Image limit",
+        "ChatGPT 4",
+        "Support Priority",
+        "Unlimited Word Tokens",
+        "Unlimited Image Tokens",
       ],
-      button: "Upgrade now",
-      highlighted: true,
-      icon: <Gem className="w-6 h-6 text-foreground" />,
+      button: "Get started",
+      highlighted: true, // 🌈 Highlight last plan
+      icon: <IconDiamond className="w-6 h-6 text-foreground" />,
     },
   ];
 
@@ -62,60 +74,68 @@ export default function PricingSection() {
         {plans.map((plan) => (
           <div
             key={plan.name}
-            className={`transition-all p-4 rounded-3xl outline-[.5rem] outline-grayBackground ${
-              plan.highlighted
-                ? "transition-all p-4 rounded-3xl outline outline-gradientColor"
-                : "outline"
-            }`}
+            className={`relative p-[10px] rounded-3xl transition-all 
+              ${
+                plan.highlighted
+                  ? "bg-gradient-to-r from-[#D3F36B] to-[#6BAAF3]"
+                  : "bg-grayBackground hover:bg-gradient-to-r from-[#D3F36B] to-[#6BAAF3] transition-all duration-300"
+              }`}
           >
-            {/* Icon + text */}
-            <div className="flex justify-between items-center">
+            <div className="bg-background rounded-3xl p-6 h-full">
+              {/* Badge */}
+              {plan.highlighted && (
+                <div className="absolute top-4 right-4">
+                  <button className="text-[#24282C] px-3 py-1 text-sm font-bold bg-gradient-to-r from-[#E7FF9B] to-[#CFE6FF] rounded-xl mt-4 mr-2">
+                    Most Popular
+                  </button>
+                </div>
+              )}
+
+              {/* Icon */}
               <div className="w-12 h-12 rounded-full border shadow-xl p-2 my-4 flex items-center justify-center">
                 {plan.icon}
               </div>
-              <div>
-                {plan.highlighted && (
-                  <button className="text-[#24282C] p-2 text-base font-bold bg-gradient-to-r from-[#E7FF9B] to-[#CFE6FF] rounded-xl">
-                    Most Popular
-                  </button>
-                )}
+
+              {/* Title */}
+              <h3 className="text-xl font-bold text-foreground mb-2">
+                {plan.name}
+              </h3>
+
+              {/* Description */}
+              <p className="text-para text-base">{plan.description}</p>
+
+              {/* Price */}
+              <div className="mt-4 flex items-center gap-2">
+                <p className="text-4xl font-bold text-foreground">
+                  {plan.price}
+                </p>
+                <span className="text-muted-foreground text-base">/month</span>
               </div>
+
+              {/* Button */}
+              <button
+                className={`mt-6 w-full rounded-lg px-4 py-2 text-sm font-medium transition 
+                  ${
+                    plan.highlighted
+                      ? "bg-gradient-to-r from-[#D3F36B] to-[#6BAAF3] text-black hover:opacity-90"
+                      : "border border-white hover:bg-white hover:text-black"
+                  }`}
+              >
+                {plan.button}
+              </button>
+
+              {/* Features */}
+              <ul className="mt-6 space-y-3 text-sm text-left">
+                {plan.features.map((feature) => (
+                  <li key={feature} className="flex items-center gap-2">
+                    <span className="text-green-500">
+                      <IconCircleCheckFilled className="w-4 h-4" />
+                    </span>
+                    {feature}
+                  </li>
+                ))}
+              </ul>
             </div>
-
-            {/* Title */}
-            <h3 className="text-xl font-bold text-foreground mb-2">
-              {plan.name}
-            </h3>
-
-            {/* Description */}
-            <p className="text-para text-base">{plan.description}</p>
-
-            {/* Price */}
-            <div className="mt-4 flex items-center gap-2">
-              <p className="text-4xl font-bold text-foreground">{plan.price}</p>
-              <span className="text-muted-foreground text-base">/month</span>
-            </div>
-
-            {/* Button */}
-            <button
-              className={`mt-6 w-full rounded-lg px-4 py-2 text-sm font-medium transition ${
-                plan.highlighted
-                  ? "bg-white text-black hover:bg-gray-100"
-                  : "border border-white hover:bg-white hover:text-black"
-              }`}
-            >
-              {plan.button}
-            </button>
-
-            {/* Features */}
-            <ul className="mt-6 space-y-3 text-sm text-left">
-              {plan.features.map((feature) => (
-                <li key={feature} className="flex items-center gap-2">
-                  <span className="text-green-500">✔</span>
-                  {feature}
-                </li>
-              ))}
-            </ul>
           </div>
         ))}
       </div>

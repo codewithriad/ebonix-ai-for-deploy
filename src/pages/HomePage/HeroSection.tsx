@@ -7,18 +7,31 @@ const HeroSection = () => {
   return (
     <section className="bg-background">
       {/* hero typography */}
-      <div className="w-full mx-auto flex justify-center items-center flex-col max-w-[960px]">
+      <div className="w-full mx-auto flex justify-center items-center flex-col max-w-[1400px]">
         <h1
-          className="text-foreground text-[56px] font-[900] lg:leading-[5rem] text-center"
+          className="
+    text-[56px] 
+    font-[900] 
+    lg:leading-[5rem] 
+    text-center 
+    bg-gradient-to-r 
+    from-[#D3F36B] 
+    to-[#6BAAF3] 
+    bg-clip-text 
+    text-transparent
+  "
           style={{ fontFamily: "Inter" }}
         >
-          Transforming ideas into AI generated masterpieces
+          Ai that Gets us!
         </h1>
-        <p className="text-xl leading-8 text-center text-para mt-4 md:mx-28">
-          Effortlessly generate high-quality AI-driven content tailored to your
-          needs. Unlock limitless possibilities, save your time and start making
-          money today!
+
+        <p className="font-inter text-[20px] leading-[32px] font-normal text-center text-para mt-4 md:mx-28 max-w-7xl">
+          Generate high-quality videos, pictures, and content concepts and ideas
+          from BLACK human experiences.
         </p>
+        <h3 className="font-inter text-2xl leading-[32px] font-bold text-center text-para mt-4 md:mx-28">
+          No dry, generic AI. No forced code-switching.
+        </h3>
         <>
           <button
             type="button"
