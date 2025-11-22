@@ -1,15 +1,30 @@
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/outline";
-import { Play, Plus } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
+import { Play, Sparkles } from "lucide-react";
+import { useState } from "react";
 import { AppSidebar } from "../AppSidebar";
+import { ChatHeader } from "../ChatHeader";
 
 type Props = {};
 
 const Video = (props: Props) => {
+  const [prompt, setPrompt] = useState("");
+  const [voiceNarration, setVoiceNarration] = useState(false);
+
   return (
     <SidebarProvider>
       <div className="flex flex-col md:flex-row w-full min-h-screen overflow-x-hidden">
-        {/* Sidebar */}
         <div className="w-full md:w-auto flex-shrink-0">
           <AppSidebar
             onNewChat={() => {}}
@@ -19,55 +34,130 @@ const Video = (props: Props) => {
           />
         </div>
 
-        {/* Main content */}
         <main className="flex-1 bg-background text-foreground p-4 sm:p-6 md:p-8 w-full h-full">
-          <div className="max-w-[1800px] mx-auto">
-            {/* Center Content */}
-            <div className="flex flex-col justify-center items-center min-h-[80vh] text-center px-4  transition-colors duration-500">
-              {/* Play Button */}
-              <div className="relative group">
-                {/* Outer glow animation */}
-                <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-rose-400 to-red-500 blur-xl opacity-30 group-hover:opacity-50 transition-opacity duration-500"></div>
+          <div className="block md:hidden">
+            <ChatHeader />
+          </div>
 
-                {/* Button core */}
-                <div className="relative w-20 h-20 flex justify-center items-center rounded-3xl bg-gradient-to-br from-rose-500 to-red-400 shadow-[0_0_20px_rgba(244,63,94,0.4)] hover:shadow-[0_0_35px_rgba(244,63,94,0.6)] cursor-pointer transform hover:scale-110 transition-all duration-300 ease-out">
-                  <Play className="h-12 w-12 text-white drop-shadow-md" />
-                </div>
-              </div>
-
-              {/* Text Section */}
-              <h3 className="text-foreground  text-xl sm:text-3xl font-extrabold mt-8 mb-3 tracking-tight">
-                Video
-              </h3>
-              <p className="text-para text-lg sm:text-xl max-w-md">
-                Use your imagination to bring your ideas to life with
-                AI-generated videos.
+          <div className="p-8 max-w-7xl mx-auto space-y-6">
+            <div>
+              <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
+                <Play className="w-8 h-8 text-accent" />
+                Video Generator
+              </h1>
+              <p className="text-muted-foreground">
+                Create dynamic video content with AI
               </p>
             </div>
 
-            {/* chat input */}
-            <div className="relative flex items-center gap-3 w-full max-w-6xl mx-auto mt-10 bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-950 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-lg dark:shadow-[0_0_20px_rgba(255,255,255,0.05)] px-4 py-3 transition-all duration-300 hover:shadow-xl dark:hover:shadow-[0_0_25px_rgba(255,255,255,0.08)]">
-              {/* Plus Icon */}
-              <button className="p-2 rounded-xl bg-gradient-to-br from-rose-500 to-red-400 text-white hover:scale-110 transition-transform duration-200 shadow-md">
-                <Plus className="h-5 w-5" />
-              </button>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="lg:col-span-2 space-y-6">
+                <Card className="bg-card border-border">
+                  <CardContent className="p-6 space-y-4">
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-foreground">
+                        Scene Description
+                      </label>
+                      <Textarea
+                        value={prompt}
+                        onChange={(e) => setPrompt(e.target.value)}
+                        placeholder="Describe the video scene you want to create..."
+                        className="min-h-[120px] bg-background border-border"
+                      />
+                    </div>
 
-              {/* Input */}
-              <input
-                type="text"
-                name="text"
-                id="text"
-                placeholder="Type your prompt here..."
-                className="flex-1 bg-transparent outline-none text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 text-lg caret-rose-500"
-              />
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium text-foreground">
+                          Duration
+                        </label>
+                        <Select defaultValue="5">
+                          <SelectTrigger className="bg-background border-border">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent className="bg-popover border-border">
+                            <SelectItem value="5">5 seconds</SelectItem>
+                            <SelectItem value="10">10 seconds</SelectItem>
+                            <SelectItem value="15">15 seconds</SelectItem>
+                            <SelectItem value="30">30 seconds</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium text-foreground">
+                          Style
+                        </label>
+                        <Select defaultValue="cinematic">
+                          <SelectTrigger className="bg-background border-border">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent className="bg-popover border-border">
+                            <SelectItem value="cinematic">Cinematic</SelectItem>
+                            <SelectItem value="documentary">
+                              Documentary
+                            </SelectItem>
+                            <SelectItem value="abstract">Abstract</SelectItem>
+                            <SelectItem value="commercial">
+                              Commercial
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
 
-              {/* Send Icon */}
-              <button className="p-2 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-500 text-white hover:scale-110 transition-transform duration-200 shadow-md">
-                <ArrowTopRightOnSquareIcon className="h-5 w-5" />
-              </button>
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id="narration"
+                        checked={voiceNarration}
+                        onCheckedChange={setVoiceNarration}
+                      />
+                      <Label htmlFor="narration" className="text-foreground">
+                        Enable voice narration
+                      </Label>
+                    </div>
 
-              {/* subtle glow effect */}
-              <div className="absolute inset-0 rounded-2xl blur-xl opacity-40 bg-gradient-to-r from-rose-400 via-purple-500 to-blue-400 -z-10 animate-pulse"></div>
+                    <Button className="w-full bg-accent text-accent-foreground hover:bg-accent/90 shadow-glow-blue">
+                      <Sparkles className="w-4 h-4 mr-2" />
+                      Generate Video
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                <Card className="bg-card border-border">
+                  <CardContent className="p-6">
+                    <div className="aspect-video bg-gradient-to-br from-accent/10 to-primary/10 rounded-lg flex items-center justify-center">
+                      <div className="text-center space-y-2">
+                        <Play className="w-16 h-16 text-accent/50 mx-auto" />
+                        <p className="text-muted-foreground">
+                          Your generated video will appear here
+                        </p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-foreground">
+                  Recent Videos
+                </h3>
+                {[1, 2, 3].map((i) => (
+                  <Card
+                    key={i}
+                    className="bg-card border-border hover:border-accent/50 cursor-pointer hover:shadow-glow-subtle transition-all"
+                  >
+                    <CardContent className="p-3">
+                      <div className="aspect-video bg-gradient-to-br from-accent/20 to-primary/20 rounded-lg mb-2 flex items-center justify-center">
+                        <Play className="w-8 h-8 text-accent/50" />
+                      </div>
+                      <p className="text-sm text-foreground font-medium">
+                        Video {i}
+                      </p>
+                      <p className="text-xs text-muted-foreground">1 day ago</p>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
             </div>
           </div>
         </main>

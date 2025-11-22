@@ -74,7 +74,6 @@ export function AppSidebar({
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         try {
-          // Get user document from Firestore
           const userDocRef = doc(db, "users", user.uid);
           const userDoc = await getDoc(userDocRef);
 
@@ -92,7 +91,6 @@ export function AppSidebar({
                 )}&background=random`,
             });
           } else {
-            // If no Firestore document, use Firebase Auth data
             setUserInfo({
               name: user.displayName || "User",
               email: user.email || "No email",
@@ -106,7 +104,6 @@ export function AppSidebar({
           }
         } catch (error) {
           console.error("Error fetching user data:", error);
-          // Fallback to auth data
           setUserInfo({
             name: user.displayName || "User",
             email: user.email || "No email",
@@ -186,7 +183,6 @@ export function AppSidebar({
   const handleLogout = async () => {
     try {
       await auth.signOut();
-      // Redirect to login page or handle logout
       window.location.href = "/login";
     } catch (error) {
       console.error("Error signing out:", error);
@@ -195,19 +191,24 @@ export function AppSidebar({
 
   return (
     <Sidebar
-      className="bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800"
+      className="bg-[#1a1e230f] dark:bg-gray-900 border-r-2 border-gray-100 dark:border-gray-800"
       collapsible="icon"
     >
       {/* Header */}
-      <SidebarHeader className="h-16 px-4 flex items-center border-b border-gray-200 dark:border-gray-800">
+      <SidebarHeader className="h-16 px-4 flex items-center bg-background">
         <div className="flex items-center justify-between w-full gap-3">
           {!collapsed && (
-            <div className="flex items-center gap-3 flex-1 min-w-0">
+            <div className="flex items-center gap-3 flex-1">
               <NavLink to="/">
                 <img
-                  src={theme === "dark" ? ebonixLogoDark : ebonixLogoLight}
+                  src={ebonixLogoLight}
                   alt="EbonixAI"
-                  className="h-7 w-auto flex-shrink-0"
+                  className="h-10 w-auto flex-shrink-0 block dark:hidden"
+                />
+                <img
+                  src={ebonixLogoDark}
+                  alt="EbonixAI"
+                  className="h-10 w-auto flex-shrink-0 hidden dark:block"
                 />
               </NavLink>
             </div>
@@ -222,7 +223,7 @@ export function AppSidebar({
       {/* Navigation */}
       <nav
         className={`flex-1 overflow-y-auto ${
-          collapsed ? "p-2 space-y-2" : "p-4 space-y-2"
+          collapsed ? "p-2 space-y-1.5" : "p-3 space-y-1.5 bg-background"
         }`}
       >
         {menuItems.map((item) => {
@@ -233,56 +234,32 @@ export function AppSidebar({
               key={item.link}
               to={item.link}
               className={`
-                group relative flex items-center gap-3 px-4 py-3.5 rounded-xl
-                transition-all duration-300 ease-out overflow-hidden
+                group relative flex items-center gap-3 px-3 py-2.5 rounded-xl
+                transition-all duration-200 ease-out overflow-hidden
                 ${collapsed ? "justify-center px-2" : ""}
                 ${
                   isActive
-                    ? "bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 text-white shadow-lg shadow-blue-500/50 dark:shadow-blue-600/40 scale-[1.02]"
-                    : "text-gray-700 dark:text-gray-300 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 dark:hover:from-blue-950/30 dark:hover:to-indigo-950/30 hover:text-blue-700 dark:hover:text-blue-400 hover:shadow-md hover:shadow-blue-100/50 dark:hover:shadow-blue-900/20 hover:scale-[1.02] active:scale-[0.98]"
+                    ? "bg-gradient-to-r from-lime-400 to-cyan-400 dark:from-primary dark:to-accent text-gray-900 dark:text-gray-900 shadow-lg shadow-lime-400/30 dark:shadow-primary/30"
+                    : "text-lime-600 hover:bg-gradient-to-r hover:from-lime-400/10 hover:to-cyan-400/10 dark:hover:from-primary/10 dark:hover:to-accent/10 hover:text-gray-900 dark:hover:text-gray-100"
                 }
               `}
             >
-              {/* Animated gradient background overlay on hover */}
-              <span
-                className={`
-                absolute inset-0 opacity-0 transition-opacity duration-300
-                bg-gradient-to-r from-blue-400/10 via-indigo-400/10 to-blue-400/10
-                ${!isActive && "group-hover:opacity-100"}
-              `}
-              />
-
-              {/* Shimmer effect on hover */}
-              <span
-                className={`
-                absolute inset-0 -translate-x-full group-hover:translate-x-full
-                transition-transform duration-1000 ease-out
-                bg-gradient-to-r from-transparent via-white/20 to-transparent
-                ${!isActive && "group-hover:block"}
-              `}
-                style={{ width: "50%" }}
-              />
-
               {/* Icon */}
               <div
                 className={`
-                relative z-10 flex-shrink-0 transition-all duration-300
-                ${
-                  isActive
-                    ? "drop-shadow-sm"
-                    : "group-hover:scale-110 group-hover:rotate-3"
-                }
+                relative z-10 flex-shrink-0 transition-transform duration-200
+                ${isActive ? "" : "group-hover:scale-110"}
               `}
               >
                 <img
                   src={item.icon}
                   alt={`${item.name} icon`}
                   className={`
-                    w-5 h-5 object-contain transition-all duration-300
+                    w-5 h-5 object-contain transition-all duration-200
                     ${
                       isActive
-                        ? "brightness-0 invert"
-                        : "opacity-75 group-hover:opacity-100"
+                        ? "brightness-0"
+                        : "opacity-70 group-hover:opacity-100"
                     }
                   `}
                 />
@@ -292,22 +269,17 @@ export function AppSidebar({
               {!collapsed && (
                 <span
                   className={`
-                  relative z-10 text-[15px] font-medium truncate transition-all duration-300
-                  ${isActive ? "font-semibold" : "group-hover:font-semibold"}
+                  relative z-10 text-sm font-medium truncate transition-all duration-200
+                  ${isActive ? "font-bold" : "group-hover:font-semibold"}
                 `}
                 >
                   {item.name}
                 </span>
               )}
 
-              {/* Active indicator dot (visible when collapsed) */}
+              {/* Active indicator (visible when collapsed) */}
               {collapsed && isActive && (
-                <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-white rounded-full" />
-              )}
-
-              {/* Glow effect for active state */}
-              {isActive && (
-                <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-400/20 to-indigo-400/20 blur-sm" />
+                <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-gray-900 dark:bg-white rounded-full" />
               )}
             </NavLink>
           );
@@ -315,10 +287,10 @@ export function AppSidebar({
       </nav>
 
       {/* Footer */}
-      <SidebarFooter className="p-3 border-t border-gray-200 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-900/50">
+      <SidebarFooter className="p-3 bg-background border-t-2 border-gray-100 dark:border-gray-800">
         {loading ? (
           <div className="flex items-center justify-center py-6">
-            <div className="animate-spin rounded-full h-6 w-6 border-2 border-blue-600 border-t-transparent"></div>
+            <div className="animate-spin rounded-full h-6 w-6 border-2 border-lime-500 dark:border-primary border-t-transparent"></div>
           </div>
         ) : userInfo ? (
           <div className="space-y-2">
@@ -326,7 +298,7 @@ export function AppSidebar({
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="ghost"
-                  className={`w-full h-auto p-2.5 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-all ${
+                  className={`w-full h-auto p-2.5 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl transition-all ${
                     collapsed ? "justify-center" : "justify-start"
                   }`}
                 >
@@ -335,17 +307,17 @@ export function AppSidebar({
                       <img
                         src={userInfo.avatar}
                         alt={userInfo.name}
-                        className="h-9 w-9 rounded-full object-cover ring-2 ring-gray-200 dark:ring-gray-700"
+                        className="h-9 w-9 rounded-full object-cover ring-2 ring-lime-400 dark:ring-primary"
                       />
                       <div className="absolute -bottom-0.5 -right-0.5 h-3 w-3 bg-green-500 rounded-full border-2 border-white dark:border-gray-900"></div>
                     </div>
 
                     {!collapsed && (
                       <div className="flex flex-col items-start flex-1 min-w-0">
-                        <span className="text-[15px] font-semibold text-gray-900 dark:text-gray-100 truncate w-full text-left">
+                        <span className="text-sm font-bold text-gray-900 dark:text-gray-100 truncate w-full text-left">
                           {userInfo.name}
                         </span>
-                        <span className="text-[13px] text-gray-500 dark:text-gray-400 truncate w-full text-left">
+                        <span className="text-xs text-gray-500 dark:text-gray-400 truncate w-full text-left">
                           {userInfo.email}
                         </span>
                       </div>
@@ -361,25 +333,25 @@ export function AppSidebar({
               <DropdownMenuContent
                 side="top"
                 align="end"
-                className="w-64 mb-2 shadow-lg border border-gray-200 dark:border-gray-700"
+                className="w-64 mb-2 shadow-xl border-2 border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800"
               >
                 <DropdownMenuLabel className="p-3">
                   <div className="flex items-center gap-3">
                     <img
                       src={userInfo.avatar}
                       alt={userInfo.name}
-                      className="h-12 w-12 rounded-full object-cover ring-2 ring-gray-200 dark:ring-gray-700"
+                      className="h-12 w-12 rounded-full object-cover ring-2 ring-lime-400 dark:ring-primary"
                     />
                     <div className="flex flex-col min-w-0 flex-1">
-                      <p className="text-[15px] font-semibold text-gray-900 dark:text-gray-100 truncate">
+                      <p className="text-sm font-bold text-gray-900 dark:text-gray-100 truncate">
                         {userInfo.name}
                       </p>
-                      <p className="text-[13px] text-gray-500 dark:text-gray-400 truncate">
+                      <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
                         {userInfo.email}
                       </p>
-                      <div className="mt-1.5 inline-flex items-center gap-1 px-2 py-0.5 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/50 dark:to-indigo-950/50 border border-blue-200 dark:border-blue-800 rounded-full">
-                        <Sparkles className="h-3 w-3 text-blue-600 dark:text-blue-400" />
-                        <span className="text-xs font-medium text-blue-700 dark:text-blue-400">
+                      <div className="mt-1.5 inline-flex items-center gap-1 px-2 py-0.5 bg-gradient-to-r from-lime-400/20 to-cyan-400/20 dark:from-primary/20 dark:to-accent/20 border-2 border-lime-400/50 dark:border-primary/50 rounded-full">
+                        <Sparkles className="h-3 w-3 text-lime-600 dark:text-primary" />
+                        <span className="text-xs font-bold text-lime-700 dark:text-primary">
                           {userInfo.plan}
                         </span>
                       </div>
@@ -389,29 +361,29 @@ export function AppSidebar({
 
                 <DropdownMenuSeparator />
 
-                <DropdownMenuItem className="cursor-pointer py-2.5 px-3 focus:bg-gray-100 dark:focus:bg-gray-800">
-                  <User className="mr-3 h-4 w-4 text-gray-500" />
-                  <span className="text-[14px]">Profile</span>
+                <DropdownMenuItem className="cursor-pointer py-2.5 px-3 focus:bg-gray-100 dark:focus:bg-gray-700 rounded-lg mx-1">
+                  <User className="mr-3 h-4 w-4 text-gray-500 dark:text-gray-400" />
+                  <span className="text-sm font-medium">Profile</span>
                 </DropdownMenuItem>
 
-                <DropdownMenuItem className="cursor-pointer py-2.5 px-3 focus:bg-gray-100 dark:focus:bg-gray-800">
-                  <CreditCard className="mr-3 h-4 w-4 text-gray-500" />
-                  <span className="text-[14px]">Billing & Plans</span>
+                <DropdownMenuItem className="cursor-pointer py-2.5 px-3 focus:bg-gray-100 dark:focus:bg-gray-700 rounded-lg mx-1">
+                  <CreditCard className="mr-3 h-4 w-4 text-gray-500 dark:text-gray-400" />
+                  <span className="text-sm font-medium">Billing & Plans</span>
                 </DropdownMenuItem>
 
-                <DropdownMenuItem className="cursor-pointer py-2.5 px-3 focus:bg-gray-100 dark:focus:bg-gray-800">
-                  <Settings className="mr-3 h-4 w-4 text-gray-500" />
-                  <span className="text-[14px]">Settings</span>
+                <DropdownMenuItem className="cursor-pointer py-2.5 px-3 focus:bg-gray-100 dark:focus:bg-gray-700 rounded-lg mx-1">
+                  <Settings className="mr-3 h-4 w-4 text-gray-500 dark:text-gray-400" />
+                  <span className="text-sm font-medium">Settings</span>
                 </DropdownMenuItem>
 
                 <DropdownMenuSeparator />
 
                 <DropdownMenuItem
-                  className="cursor-pointer py-2.5 px-3 text-red-600 dark:text-red-400 focus:bg-red-50 dark:focus:bg-red-950/20 focus:text-red-700 dark:focus:text-red-300"
+                  className="cursor-pointer py-2.5 px-3 text-red-600 dark:text-red-400 focus:bg-red-50 dark:focus:bg-red-950/30 rounded-lg mx-1"
                   onClick={handleLogout}
                 >
                   <LogOut className="mr-3 h-4 w-4" />
-                  <span className="text-[14px] font-medium">Log out</span>
+                  <span className="text-sm font-bold">Log out</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -420,7 +392,7 @@ export function AppSidebar({
               <Button
                 variant="default"
                 size="sm"
-                className="w-full h-10 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-sm hover:shadow-md transition-all duration-200 font-medium text-[14px]"
+                className="w-full h-10 bg-gradient-to-r from-lime-400 to-cyan-400 hover:from-lime-500 hover:to-cyan-500 dark:from-primary dark:to-accent dark:hover:from-primary/90 dark:hover:to-accent/90 text-gray-900 dark:text-gray-900 shadow-lg shadow-lime-400/30 dark:shadow-primary/30 hover:shadow-xl hover:shadow-lime-400/40 dark:hover:shadow-primary/40 transition-all duration-200 font-bold text-sm border-2 border-lime-500/50 dark:border-primary/50"
               >
                 <Sparkles className="mr-2 h-4 w-4" />
                 Upgrade to Pro
@@ -451,7 +423,6 @@ function ProjectModalTrigger({ collapsed }: { collapsed?: boolean }) {
         </div>
       </SidebarMenuButton>
 
-      {/* The Project Modal */}
       <ProjectModal open={open} setOpen={setOpen} />
     </>
   );

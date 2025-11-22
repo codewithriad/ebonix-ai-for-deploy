@@ -1,72 +1,33 @@
+import { Card, CardContent } from "@/components/ui/card";
 import { SidebarProvider } from "@/components/ui/sidebar";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AppSidebar } from "@/pages/ebonix-prompt/AppSidebar";
-import {
-  Brain,
-  Code2,
-  CopyCheck,
-  FileText,
-  Headphones,
-  Image,
-  MessageSquare,
-  Mic,
-  Video,
-  Volume2,
-} from "lucide-react";
-import { NavLink } from "react-router-dom";
+import { IconFolderOpen } from "@tabler/icons-react";
+import { FolderOpen, Image, MessageSquare, Video } from "lucide-react";
 import { ChatHeader } from "../ChatHeader";
 
-const cards = [
-  {
-    title: "Conversations",
-    desc: "Chat conversations created with the Chat tool",
-    icon: <MessageSquare className="h-6 w-6 text-sky-500" />,
-  },
-  {
-    title: "Documents",
-    desc: "Documents created with the Writer tool",
-    icon: <FileText className="h-6 w-6 text-orange-400" />,
-  },
-  {
-    title: "Code documents",
-    desc: "Code related documents created with the Coder tool",
-    icon: <Code2 className="h-6 w-6 text-pink-500" />,
-  },
-  {
-    title: "Images",
-    desc: "Image files created with the Imagine tool",
-    icon: <Image className="h-6 w-6 text-purple-400" />,
-  },
-  {
-    title: "Videos",
-    desc: "Video files created with the Video tool",
-    icon: <Video className="h-6 w-6 text-rose-400" />,
-  },
-  {
-    title: "Transcriptions",
-    desc: "Transcriptions created with the Transcriber tool",
-    icon: <Mic className="h-6 w-6 text-cyan-400" />,
-  },
-  {
-    title: "Speeches",
-    desc: "Audio speeches created from text inputs",
-    icon: <Volume2 className="h-6 w-6 text-green-500" />,
-  },
-  {
-    title: "Cloned voices",
-    desc: "Your cloned voices",
-    icon: <Headphones className="h-6 w-6 text-emerald-400" />,
-  },
-  {
-    title: "Isolated voices",
-    desc: "Voices isolated from background noise",
-    icon: <Brain className="h-6 w-6 text-indigo-400" />,
-  },
-  {
-    title: "Classifications",
-    desc: "Reports created with the Classifier tool",
-    icon: <CopyCheck className="h-6 w-6 text-fuchsia-400" />,
-  },
-];
+const items = {
+  chats: Array.from({ length: 6 }, (_, i) => ({
+    id: i + 1,
+    title: `Chat Session ${i + 1}`,
+    date: "2 days ago",
+  })),
+  images: Array.from({ length: 6 }, (_, i) => ({
+    id: i + 1,
+    title: `Generated Image ${i + 1}`,
+    date: "3 days ago",
+  })),
+  videos: Array.from({ length: 6 }, (_, i) => ({
+    id: i + 1,
+    title: `Video Project ${i + 1}`,
+    date: "1 week ago",
+  })),
+  projects: Array.from({ length: 6 }, (_, i) => ({
+    id: i + 1,
+    title: `Project ${i + 1}`,
+    date: "5 days ago",
+  })),
+};
 
 export default function LibraryPage() {
   return (
@@ -97,63 +58,82 @@ export default function LibraryPage() {
           <div className="block md:hidden">
             <ChatHeader />
           </div>
-          <div className="max-w-[1800px] mx-auto">
-            {/* Header */}
-            <div className="mb-8">
-              <NavLink
-                to={"/app"}
-                className="text-xs sm:text-sm text-muted-foreground hover:text-gray-200 mb-1 block"
-              >
-                Dashboard
-              </NavLink>
-              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mt-2">
-                Library
-              </h1>
+          <div className="p-8 max-w-7xl mx-auto space-y-6">
+            <div>
+              <h1 className="text-3xl font-bold text-foreground">Library</h1>
+              <p className="text-muted-foreground">
+                All your saved creations in one place
+              </p>
             </div>
 
-            {/* Card grid */}
-            <div
-              className="
-                grid 
-                grid-cols-1 
-                sm:grid-cols-2 
-                lg:grid-cols-3 
-                xl:grid-cols-4 
-                gap-4 
-                sm:gap-6
-              "
-            >
-              {cards.map((card) => (
-                <div
-                  key={card.title}
-                  className="
-                    p-4 sm:p-5 
-                    bg-card 
-                    rounded-xl 
-                    border 
-                    hover:bg-accent/20 
-                    transition-all 
-                    cursor-pointer 
-                    shadow-sm 
-                    flex 
-                    flex-col 
-                    justify-between
-                  "
+            <Tabs defaultValue="chats" className="w-full">
+              <TabsList className="bg-card border border-border">
+                <TabsTrigger
+                  value="chats"
+                  className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
                 >
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="p-2 rounded-md bg-muted flex items-center justify-center">
-                      {card.icon}
-                    </div>
-                    <h3 className="font-semibold text-base sm:text-lg">
-                      {card.title}
-                    </h3>
+                  <MessageSquare className="w-4 h-4 mr-2" />
+                  Chats
+                </TabsTrigger>
+                <TabsTrigger
+                  value="images"
+                  className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+                >
+                  <Image className="w-4 h-4 mr-2" />
+                  Images
+                </TabsTrigger>
+                <TabsTrigger
+                  value="videos"
+                  className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+                >
+                  <Video className="w-4 h-4 mr-2" />
+                  Videos
+                </TabsTrigger>
+                <TabsTrigger
+                  value="projects"
+                  className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+                >
+                  <IconFolderOpen className="w-4 h-4 mr-2" />
+                  Projects
+                </TabsTrigger>
+              </TabsList>
+
+              {Object.entries(items).map(([key, itemList]) => (
+                <TabsContent key={key} value={key} className="mt-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {itemList.map((item) => (
+                      <Card
+                        key={item.id}
+                        className="bg-card border-border hover:border-primary/50 cursor-pointer hover:shadow-glow-subtle transition-all group"
+                      >
+                        <CardContent className="p-4">
+                          <div className="aspect-video bg-gradient-lime-blue rounded-lg mb-3 flex items-center justify-center">
+                            {key === "chats" && (
+                              <MessageSquare className="w-8 h-8 text-primary group-hover:scale-110 transition-transform" />
+                            )}
+                            {key === "images" && (
+                              <Image className="w-8 h-8 text-accent group-hover:scale-110 transition-transform" />
+                            )}
+                            {key === "videos" && (
+                              <Video className="w-8 h-8 text-primary group-hover:scale-110 transition-transform" />
+                            )}
+                            {key === "projects" && (
+                              <FolderOpen className="w-8 h-8 text-accent group-hover:scale-110 transition-transform" />
+                            )}
+                          </div>
+                          <h3 className="font-semibold text-foreground mb-1 group-hover:text-primary transition-colors">
+                            {item.title}
+                          </h3>
+                          <p className="text-sm text-muted-foreground">
+                            {item.date}
+                          </p>
+                        </CardContent>
+                      </Card>
+                    ))}
                   </div>
-                  <p className="text-sm text-muted-foreground leading-snug">
-                    {card.desc}
-                  </p>
-                </div>
+                </TabsContent>
               ))}
-            </div>
+            </Tabs>
           </div>
         </main>
       </div>

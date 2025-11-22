@@ -25,11 +25,11 @@ const HeroSection = () => {
           Ai that Gets us!
         </h1>
 
-        <p className="font-inter text-[20px] leading-[32px] font-normal text-center text-para mt-4 md:mx-28 max-w-7xl">
+        <p className="text-para font-inter text-[20px] leading-[32px] font-normal text-center mt-4 md:mx-28 max-w-7xl">
           Generate high-quality videos, pictures, and content concepts and ideas
           from BLACK human experiences.
         </p>
-        <h3 className="font-inter text-2xl leading-[32px] font-bold text-center text-para mt-4 md:mx-28">
+        <h3 className="text-para font-inter text-2xl leading-[32px] font-bold text-center mt-4 md:mx-28">
           No dry, generic AI. No forced code-switching.
         </h3>
         <>

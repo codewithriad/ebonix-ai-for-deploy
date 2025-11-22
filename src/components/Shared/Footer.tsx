@@ -4,13 +4,11 @@ import React from "react";
 const Footer: React.FC = () => {
   return (
     <footer className="bg-background max-w-full py-10">
-      <div className="bg-grayBackground px-6 py-10 rounded-[3rem] max-w-7xl mx-auto">
+      <div className="px-6 py-10 rounded-[3rem] max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between gap-10">
           {/* Left */}
           <div className="space-y-6">
-            {/* Logo for Light and Dark */}
             <div className="h-8">
-              {/* <img src={DarkLogo} alt="dark-logo" className="h-full" /> */}
               <img
                 src="/dark-nav-logo.png"
                 alt="Ebonix"
@@ -22,10 +20,10 @@ const Footer: React.FC = () => {
                 className="block dark:hidden h-full"
               />
             </div>
-            <address className="not-italic text-base text-para leading-relaxed">
+            <p className="text-para not-italic text-base leading-relaxed">
               1680 Michigan Avenue Suite 700 <br />
               Miami Beach, FL 33139 USA
-            </address>
+            </p>
           </div>
 
           {/* Middle */}
