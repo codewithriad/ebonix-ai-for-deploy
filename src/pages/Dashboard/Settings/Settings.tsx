@@ -28,7 +28,7 @@ import {
   Zap,
 } from "lucide-react";
 import React from "react";
-import Sidebar from "../Sidebar";
+import Sidebar from "../Sidebar/Sidebar";
 
 interface SettingItemProps {
   icon: React.ReactNode;
@@ -47,14 +47,14 @@ const SettingItem: React.FC<SettingItemProps> = ({
 }) => (
   <div
     onClick={() => onClick(path)}
-    className="bg-background rounded-lg p-3 sm:p-4 hover:bg-gray-750 transition-colors cursor-pointer group"
+    className="bg-background rounded-lg p-3 sm:p-4 hover:bg-gray-800 transition-colors cursor-pointer group border border-transparent group-hover:border-lime-400"
   >
-    <div className="flex items-start gap-2 sm:gap-3">
-      <div className="text-para group-hover:text-gray-300 mt-0.5 flex-shrink-0 transition-colors">
+    <div className="flex items-start gap-2 sm:gap-3 ">
+      <div className="text-para group-hover:text-lime-400 mt-0.5 flex-shrink-0 transition-colors">
         {icon}
       </div>
       <div className="flex-1 min-w-0">
-        <h3 className="text-white font-medium text-sm mb-0.5 truncate group-hover:text-blue-400 transition-colors">
+        <h3 className="text-foreground font-medium text-base mb-0.5 truncate group-hover:text-lime-400 transition-colors">
           {title}
         </h3>
         <p className="text-para text-xs line-clamp-2">{description}</p>
@@ -479,7 +479,7 @@ const Settings: React.FC = () => {
               <h2 className="text-xs sm:text-sm font-semibold text-para mb-3 uppercase tracking-wider">
                 {section.section}
               </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 ">
                 {section.items.map((item, itemIdx) => (
                   <SettingItem
                     key={itemIdx}

@@ -7,8 +7,13 @@ import React, { lazy, Suspense } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import AllUsersPage from "./pages/Dashboard/AllUsers";
 import Dashboard from "./pages/Dashboard/Dashboard";
+import Profile from "./pages/Dashboard/Profile/Profile";
 import Settings from "./pages/Dashboard/Settings/Settings";
-import AllOrders from "./pages/Dashboard/shared/AllOrders";
+// import AllOrders from "./pages/Dashboard/shared/AllOrders";
+import AllOrders from "./pages/Dashboard/Sidebar/AllOrders";
+import Payout from "./pages/Dashboard/Sidebar/Payout";
+import Plans from "./pages/Dashboard/Sidebar/Plans";
+import Templates from "./pages/Dashboard/Sidebar/Templates";
 import EbonixAiHome from "./pages/ebonix-prompt/EbonixAiHome";
 import EbonixPrompt from "./pages/ebonix-prompt/EbonixPrompt";
 import ExplorePage from "./pages/ebonix-prompt/Explore/ExplorePage";
@@ -56,6 +61,14 @@ const App = React.memo(() => (
                 }
               />
               <Route
+                path="/dashboard/profile"
+                element={
+                  <ProtectedRoute requiredRole="admin">
+                    <Profile />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
                 path="/dashboard/settings"
                 element={
                   <ProtectedRoute requiredRole="admin">
@@ -65,7 +78,7 @@ const App = React.memo(() => (
               />
 
               <Route
-                path="/all-users"
+                path="/dashboard/all-users"
                 element={
                   <ProtectedRoute requiredRole="admin">
                     <AllUsersPage />
@@ -74,13 +87,48 @@ const App = React.memo(() => (
               />
 
               <Route
-                path="dashboard/all-orders"
+                path="/dashboard/all-orders"
                 element={
                   <ProtectedRoute requiredRole="admin">
                     <AllOrders />
                   </ProtectedRoute>
                 }
               />
+
+              {/* dashboard sidebar */}
+              <Route
+                path="/dashboard/plans"
+                element={
+                  <ProtectedRoute requiredRole="admin">
+                    <Plans />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/dashboard/templates"
+                element={
+                  <ProtectedRoute requiredRole="admin">
+                    <Templates />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/dashboard/all-orders"
+                element={
+                  <ProtectedRoute requiredRole="admin">
+                    <AllOrders />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/dashboard/payouts"
+                element={
+                  <ProtectedRoute requiredRole="admin">
+                    <Payout />
+                  </ProtectedRoute>
+                }
+              />
+
               <Route path="*" element={<NotFound />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signUp" element={<SignUp />} />

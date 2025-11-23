@@ -1,20 +1,23 @@
+import {
+  IconEyeDollar,
+  IconShoppingBag,
+  IconTemplate,
+} from "@tabler/icons-react";
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   ChevronLeft,
-  Code,
   FileText,
   Home,
-  Image,
   MessageSquare,
   Mic,
-  PenTool,
   Settings,
+  User,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { auth, db } from "../../firebase/firebase.config";
+import { auth, db } from "../../../firebase/firebase.config";
 
 // Menu configuration with Lucide icons as fallback
 const MENU_CONFIG = {
@@ -34,28 +37,36 @@ const MENU_CONFIG = {
   ],
   tools: [
     {
-      label: "Chat",
-      icon: "/dashboard/chat.svg",
+      label: "Plans & Pricing",
+      icon: "/dashboard/Cube.svg",
       fallbackIcon: MessageSquare,
-      path: "/chat",
+      path: "/dashboard/plans",
     },
+
     {
-      label: "Writer",
+      label: "Users",
+      icon: "/dashboard/Users.svg",
+      fallbackIcon: User,
+      path: "/dashboard/all-users",
+    },
+
+    {
+      label: "Templates",
       icon: "/dashboard/writer1.svg",
-      fallbackIcon: PenTool,
-      path: "/writer",
+      fallbackIcon: IconTemplate,
+      path: "/dashboard/templates",
     },
     {
-      label: "Coder",
-      icon: "/dashboard/coder.svg",
-      fallbackIcon: Code,
-      path: "/coder",
+      label: "Orders",
+      icon: "/dashboard/Shopping-Cart.svg",
+      fallbackIcon: IconShoppingBag,
+      path: "/dashboard/all-orders",
     },
     {
-      label: "Imagine",
-      icon: "/dashboard/Paintbrush.svg",
-      fallbackIcon: Image,
-      path: "/imagine",
+      label: "Payouts",
+      icon: "/dashboard/Bell.svg",
+      fallbackIcon: IconEyeDollar,
+      path: "/dashboard/payouts",
     },
     {
       label: "Transcriber",

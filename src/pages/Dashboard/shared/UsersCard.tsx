@@ -53,7 +53,7 @@ export default function UsersCard() {
                 {user.initials}
               </div>
               <div>
-                <p className="text-sm font-medium">{user.name}</p>
+                <p className="text-sm text-para font-medium">{user.name}</p>
                 <p className="text-xs text-gray-500">
                   {new Date(user.createdAt).toLocaleDateString("en-US", {
                     day: "numeric",

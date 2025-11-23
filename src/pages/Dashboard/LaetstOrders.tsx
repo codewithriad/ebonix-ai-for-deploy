@@ -1,5 +1,5 @@
-import React from "react";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
+import { NavLink } from "react-router-dom";
 
 interface Order {
   id: number;
@@ -79,9 +79,11 @@ export default function LatestOrders() {
         <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
           Latest orders
         </h2>
-        <button className="text-xs bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 px-2 py-1 rounded hover:bg-gray-200 dark:hover:bg-gray-600 transition">
-          View all
-        </button>
+        <NavLink to="/dashboard/all-orders">
+          <button className="text-xs bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 px-2 py-1 rounded hover:bg-gray-200 dark:hover:bg-gray-600 transition">
+            View all
+          </button>
+        </NavLink>
       </div>
 
       {/* Table Header Row */}

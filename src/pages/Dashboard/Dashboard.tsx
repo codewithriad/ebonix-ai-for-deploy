@@ -1,7 +1,8 @@
 import { DollarSign, ShoppingCart, TrendingUp, Users } from "lucide-react";
+import { NavLink } from "react-router-dom";
 import CustomerSatisfactions from "./CustomerSatisfactions";
 import LatestOrders from "./LaetstOrders";
-import Sidebar from "./Sidebar";
+import Sidebar from "./Sidebar/Sidebar";
 import Topbar from "./Topbar";
 import KpiCard from "./shared/KpiCard";
 import SalesChart from "./shared/SalesChart";
@@ -56,8 +57,10 @@ const Dashboard = () => {
             <div className="w-full flex flex-col bg-white dark:bg-gray-900 p-4 rounded-xl shadow">
               {/* header */}
               <div className="flex justify-between items-center gap-4 mb-3">
-                <h2 className="text-lg font-semibold">Sales Overview</h2>
-                <p className="text-sm text-gray-500">Last 30 Days</p>
+                <h2 className="text-lg text-foreground font-semibold">
+                  Sales Overview
+                </h2>
+                <p className="text-sm text-para">Last 30 Days</p>
               </div>
 
               {/* chart */}
@@ -71,8 +74,10 @@ const Dashboard = () => {
               {/* top countries */}
               <div className="flex-1 bg-white dark:bg-gray-900 p-4 rounded-xl shadow flex flex-col">
                 <div className="flex justify-between items-center gap-4 mb-3">
-                  <h2 className="text-lg font-semibold">Top Countries</h2>
-                  <p className="text-sm text-gray-500">Last 30 Days</p>
+                  <h2 className="text-lg text-foreground font-semibold">
+                    Top Countries
+                  </h2>
+                  <p className="text-sm text-para">Last 30 Days</p>
                 </div>
                 <div className="flex-1 overflow-y-auto">
                   <TopCountries />
@@ -85,12 +90,12 @@ const Dashboard = () => {
                   <h2 className="text-lg font-semibold text-gray-800 dark:text-white">
                     Users
                   </h2>
-                  <a
-                    href="/all-users"
+                  <NavLink
+                    to="/dashboard/all-users"
                     className="text-sm text-indigo-500 hover:underline"
                   >
                     View All
-                  </a>
+                  </NavLink>
                 </div>
                 <div className="flex-1 overflow-y-auto">
                   <UsersCard />
