@@ -6,15 +6,7 @@ import {
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { AnimatePresence, motion } from "framer-motion";
-import {
-  ChevronLeft,
-  FileText,
-  Home,
-  MessageSquare,
-  Mic,
-  Settings,
-  User,
-} from "lucide-react";
+import { ChevronLeft, Home, MessageSquare, Settings, User } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { auth, db } from "../../../firebase/firebase.config";
@@ -67,18 +59,6 @@ const MENU_CONFIG = {
       icon: "/dashboard/Bell.svg",
       fallbackIcon: IconEyeDollar,
       path: "/dashboard/payouts",
-    },
-    {
-      label: "Transcriber",
-      icon: "/dashboard/Copy-2.svg",
-      fallbackIcon: FileText,
-      path: "/transcriber",
-    },
-    {
-      label: "Voiceover",
-      icon: "/dashboard/voice.svg",
-      fallbackIcon: Mic,
-      path: "/voiceover",
     },
   ],
 };

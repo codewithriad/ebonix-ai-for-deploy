@@ -16,7 +16,7 @@ const CustomerSatisfactions = () => {
         </div>
 
         {/* main chart */}
-        <div className="flex justify-center items-center h-full p-4">
+        <div className="flex justify-center items-center h-full p-4 text-para">
           <PieChart
             series={[
               {
@@ -33,15 +33,10 @@ const CustomerSatisfactions = () => {
             height={320}
             width={320}
             sx={{
-              "& .MuiChartsWrapper-root .MuiChartsLegend-label": {
-                fill: "#f00 !important",
-              },
-              "& .MuiChartsLegend-root .MuiChartsLegend-label": {
-                fill: "#f00 !important",
-              },
-              "& .MuiChartsLegend-label": {
-                fill: "#f00 !important",
-              },
+              "& .MuiChartsLegend-root .MuiChartsLegend-label, & .MuiChartsLegend-label":
+                {
+                  fill: "#ff0", // Magenta color
+                },
             }}
           />
         </div>
