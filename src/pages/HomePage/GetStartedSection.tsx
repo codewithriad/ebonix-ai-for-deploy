@@ -7,6 +7,7 @@ import {
   IconSun,
   IconUsers,
 } from "@tabler/icons-react";
+import { NavLink } from "react-router-dom";
 
 const iconStyle = "w-6 h-6";
 
@@ -66,12 +67,14 @@ const GetStartedSection = () => {
           <p className="text-para mb-8 text-lg">
             See how easy it can be to write amazing content.
           </p>
-          <button className="inline-flex items-center gap-2 bg-foreground text-background hover:shadow-xl font-medium px-6 py-3 rounded-lg transition duration-300 group">
-            Get Started Now
-            <span className="transform transition-all duration-300 group-hover:translate-x-1">
-              →
-            </span>
-          </button>
+          <NavLink to="/app">
+            <button className="inline-flex items-center gap-2 bg-foreground text-background hover:shadow-xl font-medium px-6 py-3 rounded-lg transition duration-300 group">
+              Get Started Now
+              <span className="transform transition-all duration-300 group-hover:translate-x-1">
+                →
+              </span>
+            </button>
+          </NavLink>
         </div>
 
         {icons.map(({ Icon, color, bgColor, BorderColor, position }, idx) => (
