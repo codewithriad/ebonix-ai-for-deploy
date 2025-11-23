@@ -333,28 +333,28 @@ const Topbar = () => {
               {/* Menu Items */}
               <div className="py-2">
                 <button
-                  onClick={() => navigate("/profile")}
+                  onClick={() => navigate("/dashboard/profile")}
                   className="w-full px-4 py-2.5 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-3 text-gray-700 dark:text-gray-200 transition-colors"
                 >
                   <User size={18} className="text-gray-500" />
                   <span className="text-sm font-medium">My Profile</span>
                 </button>
                 <button
-                  onClick={() => navigate("/settings")}
+                  onClick={() => navigate("/dashboard/settings")}
                   className="w-full px-4 py-2.5 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-3 text-gray-700 dark:text-gray-200 transition-colors"
                 >
                   <Settings size={18} className="text-gray-500" />
                   <span className="text-sm font-medium">Settings</span>
                 </button>
                 <button
-                  onClick={() => navigate("/billing")}
+                  onClick={() => navigate("/dashboard/billing")}
                   className="w-full px-4 py-2.5 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-3 text-gray-700 dark:text-gray-200 transition-colors"
                 >
                   <CreditCard size={18} className="text-gray-500" />
                   <span className="text-sm font-medium">Billing</span>
                 </button>
                 <button
-                  onClick={() => navigate("/orders")}
+                  onClick={() => navigate("/dashboard/orders")}
                   className="w-full px-4 py-2.5 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center gap-3 text-gray-700 dark:text-gray-200 transition-colors"
                 >
                   <ShoppingBag size={18} className="text-gray-500" />

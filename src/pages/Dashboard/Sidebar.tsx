@@ -23,13 +23,13 @@ const MENU_CONFIG = {
       label: "Home",
       icon: "/dashboard/Home.svg",
       fallbackIcon: Home,
-      path: "/",
+      path: "/dashboard",
     },
     {
       label: "Settings",
       icon: "/dashboard/setting.svg",
       fallbackIcon: Settings,
-      path: "/settings",
+      path: "/dashboard/settings",
     },
   ],
   tools: [
@@ -186,7 +186,8 @@ const UserProfile = ({ userData, loading, collapsed }) => (
         collapsed ? "justify-center" : "gap-3"
       } p-3 rounded-xl hover:bg-white/5 transition-all duration-300 cursor-pointer`}
     >
-      <div className="relative flex-shrink-0">
+      {/* Image container with flex-shrink-0 to prevent compression */}
+      <div className="relative flex-shrink-0 w-10 h-10">
         {loading ? (
           <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gray-700 to-gray-600 animate-pulse" />
         ) : (
@@ -194,7 +195,7 @@ const UserProfile = ({ userData, loading, collapsed }) => (
             <img
               src={userData.photoURL}
               alt="avatar"
-              className="w-10 h-10 rounded-full border-2 border-white/30 shadow-lg object-cover"
+              className="w-full h-full rounded-full border-2 border-white/30 shadow-lg object-cover"
               onError={(e) => {
                 const target = e.target as HTMLImageElement;
                 target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(
@@ -218,7 +219,7 @@ const UserProfile = ({ userData, loading, collapsed }) => (
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -10 }}
             transition={{ duration: 0.2 }}
-            className="flex-1 min-w-0"
+            className="flex-1 min-w-0 overflow-hidden"
           >
             {loading ? (
               <>
