@@ -1,11 +1,11 @@
 import {
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  CartesianGrid,
+    Bar,
+    BarChart,
+    CartesianGrid,
+    ResponsiveContainer,
+    Tooltip,
+    XAxis,
+    YAxis,
 } from "recharts";
 
 const data = [
@@ -44,7 +44,7 @@ const data = [
 export default function SalesChart() {
   return (
     <div className="w-full h-[300px]">
-      <ResponsiveContainer width="100%" height="110%">
+      <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data}>
           <CartesianGrid strokeDasharray="3 3" strokeOpacity={0.1} />
           <XAxis dataKey="day" tick={{ fontSize: 10 }} />

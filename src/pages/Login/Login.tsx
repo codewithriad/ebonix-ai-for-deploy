@@ -1,13 +1,12 @@
 import {
-  auth,
-  db,
-  facebookProvider,
-  githubProvider,
-  googleProvider,
+    auth,
+    db,
+    githubProvider,
+    googleProvider,
 } from "@/firebase/firebase.config";
+import { ADMIN_EMAIL, uploadProfilePhoto } from "@/utils/authHelpers";
 import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
-import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { Eye, EyeOff, Lock, LogIn, Mail } from "lucide-react";
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -35,17 +34,14 @@ export default function Login() {
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  // ✅ Custom admin email
-  const adminEmail = "tapplix@gmail.com";
-
   const redirectBasedOnRole = (userEmail: string) => {
     console.log("🔀 Redirecting based on role:", {
       userEmail,
-      adminEmail,
-      isAdmin: userEmail === adminEmail,
+      adminEmail: ADMIN_EMAIL,
+      isAdmin: userEmail === ADMIN_EMAIL,
     });
 
-    if (userEmail === adminEmail) {
+    if (userEmail === ADMIN_EMAIL) {
       console.log("🔑 Admin detected, redirecting to /dashboard");
       setTimeout(() => {
         navigate("/dashboard", { replace: true });
@@ -73,7 +69,7 @@ export default function Login() {
       const docSnap = await getDoc(userRef);
 
       if (!docSnap.exists()) {
-        const role = user.email === adminEmail ? "admin" : "user";
+        const role = user.email === ADMIN_EMAIL ? "admin" : "user";
         await setDoc(
           userRef,
           {
@@ -100,16 +96,21 @@ export default function Login() {
 
       toast.success("✅ Login successful!");
       redirectBasedOnRole(user.email || "");
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("❌ Login error:", error);
-      if (error.code === "auth/invalid-email") {
-        toast.error("Invalid email address.");
-      } else if (error.code === "auth/user-not-found") {
-        toast.error("No user found with this email.");
-      } else if (error.code === "auth/wrong-password") {
-        toast.error("Incorrect password.");
-      } else if (error.code === "auth/invalid-credential") {
-        toast.error("Invalid email or password.");
+      if (error instanceof Error && "code" in error) {
+        const firebaseError = error as { code: string };
+        if (firebaseError.code === "auth/invalid-email") {
+          toast.error("Invalid email address.");
+        } else if (firebaseError.code === "auth/user-not-found") {
+          toast.error("No user found with this email.");
+        } else if (firebaseError.code === "auth/wrong-password") {
+          toast.error("Incorrect password.");
+        } else if (firebaseError.code === "auth/invalid-credential") {
+          toast.error("Invalid email or password.");
+        } else {
+          toast.error("Login failed. Please try again.");
+        }
       } else {
         toast.error("Login failed. Please try again.");
       }
@@ -126,9 +127,7 @@ export default function Login() {
         case "Google":
           provider = googleProvider;
           break;
-        case "Facebook":
-          provider = facebookProvider;
-          break;
+
         case "GitHub":
           provider = githubProvider;
           break;
@@ -143,33 +142,9 @@ export default function Login() {
       const docSnap = await getDoc(userRef);
 
       if (!docSnap.exists()) {
-        let firebasePhotoURL = user.photoURL || "";
+        const firebasePhotoURL = await uploadProfilePhoto(user);
 
-        // ✅ Google photo কে Firebase Storage এ upload করুন (429 error fix)
-        if (user.photoURL && user.photoURL.includes("googleusercontent.com")) {
-          try {
-            console.log(
-              "📸 Uploading Google profile photo to Firebase Storage..."
-            );
-            const response = await fetch(user.photoURL);
-            const blob = await response.blob();
-
-            const storage = getStorage();
-            const storageRef = ref(storage, `profile-images/${user.uid}.jpg`);
-            await uploadBytes(storageRef, blob);
-            firebasePhotoURL = await getDownloadURL(storageRef);
-            console.log(
-              "✅ Photo uploaded successfully to Firebase:",
-              firebasePhotoURL
-            );
-          } catch (uploadError) {
-            console.error("❌ Photo upload error:", uploadError);
-            // Error হলে original URL ই use করুন
-            firebasePhotoURL = user.photoURL;
-          }
-        }
-
-        const role = user.email === adminEmail ? "admin" : "user";
+        const role = user.email === ADMIN_EMAIL ? "admin" : "user";
 
         await setDoc(userRef, {
           uid: user.uid,
@@ -201,18 +176,23 @@ export default function Login() {
 
       toast.success(`✅ Logged in with ${providerName}!`);
       redirectBasedOnRole(user.email || "");
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(`❌ ${providerName} login error:`, error);
-      if (error.code === "auth/popup-closed-by-user") {
-        toast.warn("Popup closed. Try again.");
-      } else if (
-        error.code === "auth/account-exists-with-different-credential"
-      ) {
-        toast.error(
-          "Account exists with this email using a different provider."
-        );
-      } else if (error.code === "auth/cancelled-popup-request") {
-        return; // Silent fail for cancelled popups
+      if (error instanceof Error && "code" in error) {
+        const firebaseError = error as { code: string };
+        if (firebaseError.code === "auth/popup-closed-by-user") {
+          toast.warn("Popup closed. Try again.");
+        } else if (
+          firebaseError.code === "auth/account-exists-with-different-credential"
+        ) {
+          toast.error(
+            "Account exists with this email using a different provider."
+          );
+        } else if (firebaseError.code === "auth/cancelled-popup-request") {
+          return; // Silent fail for cancelled popups
+        } else {
+          toast.error(`Login failed with ${providerName}.`);
+        }
       } else {
         toast.error(`Login failed with ${providerName}.`);
       }
@@ -313,7 +293,7 @@ export default function Login() {
           </div>
 
           {/* Social Login */}
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-2 gap-3">
             <button
               onClick={() => handleSocialLogin("Google")}
               disabled={loading}
@@ -326,18 +306,7 @@ export default function Login() {
                 className="w-5 h-5"
               />
             </button>
-            <button
-              onClick={() => handleSocialLogin("Facebook")}
-              disabled={loading}
-              className="flex items-center justify-center p-3 border border-gray-200 rounded-xl hover:bg-gray-50 hover:border-gray-300 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-              title="Login with Facebook"
-            >
-              <img
-                src="https://www.svgrepo.com/show/452196/facebook-1.svg"
-                alt="Facebook"
-                className="w-5 h-5"
-              />
-            </button>
+
             <button
               onClick={() => handleSocialLogin("GitHub")}
               disabled={loading}

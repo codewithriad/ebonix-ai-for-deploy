@@ -5,22 +5,27 @@
 
 export const desktopOS = [
   {
+    id: "Apex",
     label: "Apex",
     value: 72.72,
   },
   {
+    id: "Free",
     label: "Free",
     value: 16.38,
   },
   {
+    id: "Spark",
     label: "Spark",
     value: 3.83,
   },
   {
+    id: "Flow",
     label: "Flow",
     value: 2.42,
   },
   {
+    id: "Welcome Pass",
     label: "Welcome Pass",
     value: 4.65,
   },
@@ -28,14 +33,17 @@ export const desktopOS = [
 
 export const mobileOS = [
   {
+    id: "Android",
     label: "Android",
     value: 70.48,
   },
   {
+    id: "iOS",
     label: "iOS",
     value: 28.8,
   },
   {
+    id: "Other",
     label: "Other",
     value: 0.71,
   },
@@ -43,10 +51,12 @@ export const mobileOS = [
 
 export const platforms = [
   {
+    id: "Mobile",
     label: "Mobile",
     value: 59.12,
   },
   {
+    id: "Desktop",
     label: "Desktop",
     value: 40.88,
   },

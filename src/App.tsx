@@ -7,13 +7,19 @@ import React, { lazy, Suspense } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import AllUsersPage from "./pages/Dashboard/AllUsers";
 import Dashboard from "./pages/Dashboard/Dashboard";
+import DashboardLayout from "./pages/Dashboard/Layout/DashboardLayout";
 import Profile from "./pages/Dashboard/Profile/Profile";
 import Settings from "./pages/Dashboard/Settings/Settings";
 // import AllOrders from "./pages/Dashboard/shared/AllOrders";
+import Assistants from "./pages/Dashboard/Assistants/Assistants";
+import Categories from "./pages/Dashboard/Categories/Categories";
+import Plugins from "./pages/Dashboard/Plugins/Plugins";
 import AllOrders from "./pages/Dashboard/Sidebar/AllOrders";
 import Payout from "./pages/Dashboard/Sidebar/Payout";
 import Plans from "./pages/Dashboard/Sidebar/Plans";
 import Templates from "./pages/Dashboard/Sidebar/Templates";
+import Update from "./pages/Dashboard/Update/Update";
+import Voices from "./pages/Dashboard/Voices/Voices";
 import EbonixAiHome from "./pages/ebonix-prompt/EbonixAiHome";
 import EbonixPrompt from "./pages/ebonix-prompt/EbonixPrompt";
 import ExplorePage from "./pages/ebonix-prompt/Explore/ExplorePage";
@@ -51,83 +57,28 @@ const App = React.memo(() => (
             <Routes>
               <Route path="/" element={<Index />} />
 
-              {/* only admin can visit dashboard */}
+              {/* Dashboard Routes with Layout */}
               <Route
-                path="/dashboard"
                 element={
                   <ProtectedRoute requiredRole="admin">
-                    <Dashboard />
+                    <DashboardLayout />
                   </ProtectedRoute>
                 }
-              />
-              <Route
-                path="/dashboard/profile"
-                element={
-                  <ProtectedRoute requiredRole="admin">
-                    <Profile />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/dashboard/settings"
-                element={
-                  <ProtectedRoute requiredRole="admin">
-                    <Settings />
-                  </ProtectedRoute>
-                }
-              />
-
-              <Route
-                path="/dashboard/all-users"
-                element={
-                  <ProtectedRoute requiredRole="admin">
-                    <AllUsersPage />
-                  </ProtectedRoute>
-                }
-              />
-
-              <Route
-                path="/dashboard/all-orders"
-                element={
-                  <ProtectedRoute requiredRole="admin">
-                    <AllOrders />
-                  </ProtectedRoute>
-                }
-              />
-
-              {/* dashboard sidebar */}
-              <Route
-                path="/dashboard/plans"
-                element={
-                  <ProtectedRoute requiredRole="admin">
-                    <Plans />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/dashboard/templates"
-                element={
-                  <ProtectedRoute requiredRole="admin">
-                    <Templates />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/dashboard/all-orders"
-                element={
-                  <ProtectedRoute requiredRole="admin">
-                    <AllOrders />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/dashboard/payouts"
-                element={
-                  <ProtectedRoute requiredRole="admin">
-                    <Payout />
-                  </ProtectedRoute>
-                }
-              />
+              >
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/dashboard/profile" element={<Profile />} />
+                <Route path="/dashboard/settings" element={<Settings />} />
+                <Route path="/dashboard/all-users" element={<AllUsersPage />} />
+                <Route path="/dashboard/all-orders" element={<AllOrders />} />
+                <Route path="/dashboard/plans" element={<Plans />} />
+                <Route path="/dashboard/templates" element={<Templates />} />
+                <Route path="/dashboard/payouts" element={<Payout />} />
+                <Route path="/dashboard/categories" element={<Categories />} />
+                <Route path="/dashboard/assistants" element={<Assistants />} />
+                <Route path="/dashboard/voices" element={<Voices />} />
+                <Route path="/dashboard/plugins" element={<Plugins />} />
+                <Route path="/dashboard/update" element={<Update />} />
+              </Route>
 
               <Route path="*" element={<NotFound />} />
               <Route path="/login" element={<Login />} />

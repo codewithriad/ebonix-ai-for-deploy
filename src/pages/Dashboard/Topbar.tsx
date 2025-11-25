@@ -8,6 +8,7 @@ import {
   Globe,
   HelpCircle,
   LogOut,
+  Menu,
   Moon,
   Search,
   Settings,
@@ -27,7 +28,7 @@ const DEFAULT_USER_STATE = {
   plan: "Free Plan",
 };
 
-const Topbar = () => {
+const Topbar = ({ onMenuClick }: { onMenuClick?: () => void }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -150,6 +151,14 @@ const Topbar = () => {
     <header className="w-full h-16 bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border-b border-gray-200 dark:border-gray-800 flex items-center justify-between px-4 sm:px-6 lg:px-8 sticky top-0 z-50 shadow-sm">
       {/* Left: Search Bar */}
       <div className="flex items-center gap-4 flex-1 max-w-xl">
+        {/* Mobile Menu Button */}
+        <button
+          onClick={onMenuClick}
+          className="md:hidden p-2 -ml-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg"
+        >
+          <Menu size={20} />
+        </button>
+
         <div className="relative w-full">
           <Search
             className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500"

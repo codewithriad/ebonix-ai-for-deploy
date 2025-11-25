@@ -1,4 +1,4 @@
-import { ChevronDown, MoreVertical, Plus, Search } from "lucide-react";
+import { ChevronDown, MoreVertical, Plus, Search, X } from "lucide-react";
 import { useState } from "react";
 
 interface Plan {
@@ -112,6 +112,15 @@ export default function Plans() {
   const [filterBillingCycle, setFilterBillingCycle] = useState("all");
   const [filterStatus, setFilterStatus] = useState("all");
   const [sortBy, setSortBy] = useState("default");
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [newPlan, setNewPlan] = useState({
+    name: "",
+    shortCode: "",
+    billingCycle: "Monthly" as "Monthly" | "Yearly" | "One time",
+    price: "",
+    status: "Active" as "Active" | "Inactive",
+    featured: false,
+  });
 
   const toggleStatus = (id: string) => {
     setPlans(
@@ -127,6 +136,44 @@ export default function Plans() {
           : plan
       )
     );
+  };
+
+  const handleCreatePlan = () => {
+    setShowCreateModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowCreateModal(false);
+    setNewPlan({
+      name: "",
+      shortCode: "",
+      billingCycle: "Monthly",
+      price: "",
+      status: "Active",
+      featured: false,
+    });
+  };
+
+  const handleSubmitPlan = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    const plan: Plan = {
+      id: String(plans.length + 1),
+      name: newPlan.name,
+      shortCode: newPlan.shortCode,
+      billingCycle: newPlan.billingCycle,
+      price: parseFloat(newPlan.price),
+      created: new Date().toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      }),
+      status: newPlan.status,
+      featured: newPlan.featured,
+    };
+
+    setPlans([plan, ...plans]);
+    handleCloseModal();
   };
 
   const filteredPlans = plans.filter((plan) => {
@@ -146,7 +193,10 @@ export default function Plans() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
           <h1 className="text-2xl sm:text-3xl font-bold">Plans</h1>
-          <button className="px-4 py-2 bg-lime-400 hover:bg-lime-500 text-gray-900 rounded-lg font-medium transition-colors flex items-center gap-2">
+          <button 
+            onClick={handleCreatePlan}
+            className="px-4 py-2 bg-lime-400 hover:bg-lime-500 text-gray-900 rounded-lg font-medium transition-colors flex items-center gap-2"
+          >
             <Plus className="w-5 h-5" />
             Create new plan
           </button>
@@ -302,29 +352,28 @@ export default function Plans() {
           </div>
 
           {/* Mobile Cards */}
-          <div className="lg:hidden divide-y divide-gray-700">
+          <div className="lg:hidden grid grid-cols-1 sm:grid-cols-2 gap-4">
             {filteredPlans.map((plan) => (
               <div
                 key={plan.id}
-                className="p-4 hover:bg-gray-750 transition-colors"
+                className="bg-gray-800 rounded-xl border border-gray-700 p-4 flex flex-col gap-4 hover:border-gray-600 transition-colors"
               >
-                <div className="flex items-start justify-between mb-3">
+                {/* Card Header */}
+                <div className="flex items-start justify-between">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded bg-gray-700 flex items-center justify-center font-bold text-sm">
                       {plan.shortCode}
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="font-medium">{plan.name}</span>
+                        <span className="font-medium text-white">{plan.name}</span>
                         {plan.featured && (
                           <span className="px-2 py-0.5 bg-green-500/20 text-green-400 rounded text-xs font-medium">
                             Featured
                           </span>
                         )}
                       </div>
-                      <p className="text-sm text-gray-400">
-                        {plan.billingCycle}
-                      </p>
+                      <p className="text-sm text-gray-400">{plan.billingCycle}</p>
                     </div>
                   </div>
                   <button className="p-1 hover:bg-gray-700 rounded transition-colors">
@@ -332,15 +381,17 @@ export default function Plans() {
                   </button>
                 </div>
 
-                <div className="flex items-center justify-between mb-3">
+                {/* Card Body */}
+                <div className="flex items-end justify-between border-t border-gray-700 pt-4 mt-auto">
                   <div>
-                    <p className="text-xl font-bold">
+                    <p className="text-2xl font-bold text-white">
                       ${plan.price.toFixed(2)}
                     </p>
-                    <p className="text-xs text-gray-400">
+                    <p className="text-xs text-gray-400 mt-1">
                       Created {plan.created}
                     </p>
                   </div>
+                  
                   <button
                     onClick={() => toggleStatus(plan.id)}
                     className="flex items-center gap-2"
@@ -360,15 +411,6 @@ export default function Plans() {
                         }`}
                       />
                     </div>
-                    <span
-                      className={`text-sm font-medium ${
-                        plan.status === "Active"
-                          ? "text-green-400"
-                          : "text-gray-400"
-                      }`}
-                    >
-                      {plan.status}
-                    </span>
                   </button>
                 </div>
               </div>
@@ -376,6 +418,182 @@ export default function Plans() {
           </div>
         </div>
       </div>
+
+      {/* Create Plan Modal */}
+      {showCreateModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-gray-800 rounded-xl border border-gray-700 max-w-md w-full shadow-2xl">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between p-6 border-b border-gray-700">
+              <h2 className="text-xl font-bold text-white">Create New Plan</h2>
+              <button
+                onClick={handleCloseModal}
+                className="p-1 hover:bg-gray-700 rounded transition-colors"
+              >
+                <X className="w-5 h-5 text-gray-400" />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <form onSubmit={handleSubmitPlan} className="p-6 space-y-4">
+              {/* Plan Name */}
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Plan Name *
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={newPlan.name}
+                  onChange={(e) =>
+                    setNewPlan({ ...newPlan, name: e.target.value })
+                  }
+                  className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2.5 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Enter plan name"
+                />
+              </div>
+
+              {/* Short Code */}
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Short Code *
+                </label>
+                <input
+                  type="text"
+                  required
+                  maxLength={3}
+                  value={newPlan.shortCode}
+                  onChange={(e) =>
+                    setNewPlan({ ...newPlan, shortCode: e.target.value.toUpperCase() })
+                  }
+                  className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2.5 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="e.g., AP"
+                />
+              </div>
+
+              {/* Billing Cycle */}
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Billing Cycle *
+                </label>
+                <select
+                  value={newPlan.billingCycle}
+                  onChange={(e) =>
+                    setNewPlan({
+                      ...newPlan,
+                      billingCycle: e.target.value as "Monthly" | "Yearly" | "One time",
+                    })
+                  }
+                  className="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="Monthly">Monthly</option>
+                  <option value="Yearly">Yearly</option>
+                  <option value="One time">One time</option>
+                </select>
+              </div>
+
+              {/* Price */}
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Price *
+                </label>
+                <div className="relative">
+                  <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+                    $
+                  </span>
+                  <input
+                    type="number"
+                    required
+                    min="0"
+                    step="0.01"
+                    value={newPlan.price}
+                    onChange={(e) =>
+                      setNewPlan({ ...newPlan, price: e.target.value })
+                    }
+                    className="w-full bg-gray-900 border border-gray-700 rounded-lg pl-8 pr-4 py-2.5 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="0.00"
+                  />
+                </div>
+              </div>
+
+              {/* Status */}
+              <div className="flex items-center justify-between">
+                <label className="text-sm font-medium text-gray-300">
+                  Status
+                </label>
+                <button
+                  type="button"
+                  onClick={() =>
+                    setNewPlan({
+                      ...newPlan,
+                      status: newPlan.status === "Active" ? "Inactive" : "Active",
+                    })
+                  }
+                  className="flex items-center gap-2"
+                >
+                  <div
+                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                      newPlan.status === "Active"
+                        ? "bg-green-600"
+                        : "bg-gray-600"
+                    }`}
+                  >
+                    <span
+                      className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                        newPlan.status === "Active"
+                          ? "translate-x-6"
+                          : "translate-x-1"
+                      }`}
+                    />
+                  </div>
+                  <span
+                    className={`text-sm font-medium ${
+                      newPlan.status === "Active"
+                        ? "text-green-400"
+                        : "text-gray-400"
+                    }`}
+                  >
+                    {newPlan.status}
+                  </span>
+                </button>
+              </div>
+
+              {/* Featured */}
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  id="featured"
+                  checked={newPlan.featured}
+                  onChange={(e) =>
+                    setNewPlan({ ...newPlan, featured: e.target.checked })
+                  }
+                  className="w-4 h-4 bg-gray-900 border-gray-700 rounded text-blue-600 focus:ring-2 focus:ring-blue-500"
+                />
+                <label htmlFor="featured" className="text-sm text-gray-300">
+                  Mark as featured
+                </label>
+              </div>
+
+              {/* Modal Footer */}
+              <div className="flex gap-3 pt-4">
+                <button
+                  type="button"
+                  onClick={handleCloseModal}
+                  className="flex-1 px-4 py-2.5 bg-gray-700 hover:bg-gray-600 text-white rounded-lg font-medium transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 px-4 py-2.5 bg-lime-400 hover:bg-lime-500 text-gray-900 rounded-lg font-medium transition-colors"
+                >
+                  Create Plan
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

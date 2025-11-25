@@ -1,10 +1,10 @@
 import {
   auth,
   db,
-  facebookProvider,
   githubProvider,
   googleProvider,
 } from "@/firebase/firebase.config";
+import { ADMIN_EMAIL, uploadProfilePhoto } from "@/utils/authHelpers";
 import {
   createUserWithEmailAndPassword,
   User as FirebaseUser,
@@ -12,7 +12,6 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
-import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { Eye, EyeOff, Lock, Mail, User, UserPlus } from "lucide-react";
 import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -27,9 +26,6 @@ export default function Signup() {
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  // ✅ Admin email check
-  const adminEmail = "tapplix@gmail.com";
-
   // 🔹 Create Firestore user if not exists
   const createUserIfNotExists = async (
     user: FirebaseUser,
@@ -39,27 +35,9 @@ export default function Signup() {
     const userSnap = await getDoc(userRef);
 
     if (!userSnap.exists()) {
-      let firebasePhotoURL = user.photoURL || "";
+      const firebasePhotoURL = await uploadProfilePhoto(user);
 
-      // ✅ Google photo কে Firebase Storage এ upload করুন
-      if (user.photoURL && user.photoURL.includes("googleusercontent.com")) {
-        try {
-          console.log("📸 Uploading profile photo to Firebase Storage...");
-          const response = await fetch(user.photoURL);
-          const blob = await response.blob();
-
-          const storage = getStorage();
-          const storageRef = ref(storage, `profile-images/${user.uid}.jpg`);
-          await uploadBytes(storageRef, blob);
-          firebasePhotoURL = await getDownloadURL(storageRef);
-          console.log("✅ Photo uploaded successfully:", firebasePhotoURL);
-        } catch (uploadError) {
-          console.error("❌ Photo upload error:", uploadError);
-          firebasePhotoURL = user.photoURL;
-        }
-      }
-
-      const role = user.email === adminEmail ? "admin" : "user";
+      const role = user.email === ADMIN_EMAIL ? "admin" : "user";
 
       await setDoc(userRef, {
         uid: user.uid,
@@ -106,19 +84,24 @@ export default function Signup() {
       toast.success("Account created successfully!");
 
       // ✅ Redirect based on role
-      if (user.email === adminEmail) {
+      if (user.email === ADMIN_EMAIL) {
         console.log("🔑 Admin account created, redirecting to dashboard");
         navigate("/dashboard");
       } else {
         console.log("👤 User account created, redirecting to home");
         navigate("/");
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("❌ Signup Error:", error);
-      if (error.code === "auth/email-already-in-use") {
-        toast.error("Already have an account with this email.");
-      } else if (error.code === "auth/weak-password") {
-        toast.error("Password should be at least 6 characters.");
+      if (error instanceof Error && "code" in error) {
+        const firebaseError = error as { code: string };
+        if (firebaseError.code === "auth/email-already-in-use") {
+          toast.error("Already have an account with this email.");
+        } else if (firebaseError.code === "auth/weak-password") {
+          toast.error("Password should be at least 6 characters.");
+        } else {
+          toast.error("Signup failed. Please try again.");
+        }
       } else {
         toast.error("Signup failed. Please try again.");
       }
@@ -136,9 +119,7 @@ export default function Signup() {
         case "Google":
           provider = googleProvider;
           break;
-        case "Facebook":
-          provider = facebookProvider;
-          break;
+
         case "GitHub":
           provider = githubProvider;
           break;
@@ -155,19 +136,24 @@ export default function Signup() {
       toast.success(`✅ ${providerName} signup successful!`);
 
       // ✅ Redirect based on role
-      if (user.email === adminEmail) {
+      if (user.email === ADMIN_EMAIL) {
         console.log("🔑 Admin logged in, redirecting to dashboard");
         navigate("/dashboard");
       } else {
         console.log("👤 User logged in, redirecting to home");
         navigate("/");
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("❌ Social Signup Error:", error);
-      if (error.code === "auth/popup-closed-by-user") {
-        toast.warn("Signup popup closed before completion.");
-      } else if (error.code === "auth/cancelled-popup-request") {
-        return; // Silent fail
+      if (error instanceof Error && "code" in error) {
+        const firebaseError = error as { code: string };
+        if (firebaseError.code === "auth/popup-closed-by-user") {
+          toast.warn("Signup popup closed before completion.");
+        } else if (firebaseError.code === "auth/cancelled-popup-request") {
+          return; // Silent fail
+        } else {
+          toast.error(`${providerName} signup failed. Please try again.`);
+        }
       } else {
         toast.error(`${providerName} signup failed. Please try again.`);
       }
@@ -280,7 +266,7 @@ export default function Signup() {
           </div>
 
           {/* Social Buttons */}
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-2 gap-3">
             <button
               onClick={() => handleSocialSignup("Google")}
               disabled={loading}
@@ -292,17 +278,7 @@ export default function Signup() {
                 className="w-5 h-5"
               />
             </button>
-            <button
-              onClick={() => handleSocialSignup("Facebook")}
-              disabled={loading}
-              className="flex items-center justify-center p-3 border border-gray-200 rounded-xl hover:bg-gray-50 disabled:opacity-50"
-            >
-              <img
-                src="https://www.svgrepo.com/show/452196/facebook-1.svg"
-                alt="Facebook"
-                className="w-5 h-5"
-              />
-            </button>
+
             <button
               onClick={() => handleSocialSignup("GitHub")}
               disabled={loading}

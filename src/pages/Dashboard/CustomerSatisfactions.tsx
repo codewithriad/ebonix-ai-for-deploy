@@ -16,7 +16,7 @@ const CustomerSatisfactions = () => {
         </div>
 
         {/* main chart */}
-        <div className="flex justify-center items-center h-full p-4 text-para">
+        <div className="flex justify-center items-center w-full h-[320px] p-4 text-para">
           <PieChart
             series={[
               {
@@ -30,8 +30,14 @@ const CustomerSatisfactions = () => {
                 valueFormatter,
               },
             ]}
-            height={320}
-            width={320}
+            margin={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            slotProps={{
+              legend: {
+                direction: "row",
+                position: { vertical: "bottom", horizontal: "middle" },
+                padding: 0,
+              },
+            }}
             sx={{
               "& .MuiChartsLegend-root .MuiChartsLegend-label, & .MuiChartsLegend-label":
                 {

@@ -6,7 +6,18 @@ import {
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { AnimatePresence, motion } from "framer-motion";
-import { ChevronLeft, Home, MessageSquare, Settings, User } from "lucide-react";
+import {
+  Bot,
+  ChevronLeft,
+  Home,
+  LayoutGrid,
+  MessageSquare,
+  Mic,
+  Plug,
+  RefreshCw,
+  Settings,
+  User
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { auth, db } from "../../../firebase/firebase.config";
@@ -19,6 +30,12 @@ const MENU_CONFIG = {
       icon: "/dashboard/Home.svg",
       fallbackIcon: Home,
       path: "/dashboard",
+    },
+    {
+      label: "Categories",
+      icon: "/dashboard/Category.svg", // Placeholder, will fallback
+      fallbackIcon: LayoutGrid,
+      path: "/dashboard/categories",
     },
     {
       label: "Settings",
@@ -34,7 +51,30 @@ const MENU_CONFIG = {
       fallbackIcon: MessageSquare,
       path: "/dashboard/plans",
     },
-
+    {
+      label: "Assistants",
+      icon: "/dashboard/Bot.svg", // Placeholder
+      fallbackIcon: Bot,
+      path: "/dashboard/assistants",
+    },
+    {
+      label: "Voices",
+      icon: "/dashboard/Mic.svg", // Placeholder
+      fallbackIcon: Mic,
+      path: "/dashboard/voices",
+    },
+    {
+      label: "Plugins",
+      icon: "/dashboard/Plug.svg", // Placeholder
+      fallbackIcon: Plug,
+      path: "/dashboard/plugins",
+    },
+    {
+      label: "Update",
+      icon: "/dashboard/Refresh.svg", // Placeholder
+      fallbackIcon: RefreshCw,
+      path: "/dashboard/update",
+    },
     {
       label: "Users",
       icon: "/dashboard/Users.svg",
@@ -237,8 +277,13 @@ const UserProfile = ({ userData, loading, collapsed }) => (
   </div>
 );
 
+interface SidebarProps {
+  mobileOpen?: boolean;
+  setMobileOpen?: (open: boolean) => void;
+}
+
 // Main Sidebar Component
-const Sidebar = () => {
+const Sidebar = ({ mobileOpen = false, setMobileOpen }: SidebarProps) => {
   const [collapsed, setCollapsed] = useState(false);
   const [userData, setUserData] = useState(DEFAULT_USER_STATE);
   const [loading, setLoading] = useState(true);
@@ -307,87 +352,132 @@ const Sidebar = () => {
   }, []);
 
   return (
-    <motion.aside
-      animate={{ width: collapsed ? 80 : 256 }}
-      transition={{ duration: 0.3, ease: "easeInOut" }}
-      className="bg-gradient-to-b from-[rgba(20,20,25,0.95)] to-[rgba(30,30,35,0.95)] backdrop-blur-2xl text-white h-screen flex flex-col sticky top-0 border-r border-white/10 shadow-2xl overflow-hidden"
-      style={{
-        backdropFilter: "blur(24px)",
-        WebkitBackdropFilter: "blur(24px)",
-      }}
-    >
-      {/* Animated background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-violet-500/5 via-transparent to-indigo-500/5 pointer-events-none" />
-
-      {/* Subtle animated orbs */}
-      <div className="absolute top-20 -left-20 w-40 h-40 bg-violet-500/10 rounded-full blur-3xl animate-pulse" />
-      <div
-        className="absolute bottom-20 -right-20 w-40 h-40 bg-indigo-500/10 rounded-full blur-3xl animate-pulse"
-        style={{ animationDelay: "1s" }}
-      />
-
-      {/* Header */}
-      <div className="relative z-10 flex items-center justify-between p-4 border-b border-white/10">
-        <AnimatePresence>
-          {!collapsed && (
+    <>
+      {/* Mobile overlay drawer */}
+      <AnimatePresence>
+        {mobileOpen && (
+          <div className="fixed inset-0 z-[100] flex md:hidden">
             <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.2 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+              onClick={() => setMobileOpen?.(false)}
+            />
+            <motion.aside
+              initial={{ x: -280 }}
+              animate={{ x: 0 }}
+              exit={{ x: -280 }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              className="relative w-72 bg-gradient-to-b from-[rgba(20,20,25,0.98)] to-[rgba(30,30,35,0.98)] backdrop-blur-2xl text-white h-full flex flex-col border-r border-white/10 shadow-2xl overflow-hidden"
             >
-              <Link to="/" className="flex items-center gap-2">
-                <img
-                  src="/dark-nav-logo.png"
-                  className="h-8 w-auto drop-shadow-lg"
-                  alt="logo"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.style.display = "none";
-                  }}
+              {/* Header with close */}
+              <div className="flex items-center justify-between p-4 border-b border-white/10">
+                <Link to="/" className="flex items-center gap-2">
+                  <img
+                    src="/dark-nav-logo.png"
+                    className="h-8 w-auto drop-shadow-lg"
+                    alt="logo"
+                  />
+                </Link>
+                <button
+                  onClick={() => setMobileOpen?.(false)}
+                  className="p-2 rounded-lg bg-white/5 hover:bg-white/10"
+                  aria-label="Close sidebar"
+                >
+                  <ChevronLeft size={18} />
+                </button>
+              </div>
+              {/* Menu sections */}
+              <div className="flex-1 overflow-y-auto px-2 py-6 space-y-6">
+                <MenuSection
+                  title="Menu"
+                  items={MENU_CONFIG.main}
+                  collapsed={false}
+                  gradient="from-violet-500 via-purple-500 to-indigo-600"
                 />
-              </Link>
-            </motion.div>
-          )}
-        </AnimatePresence>
+                <MenuSection
+                  title="Tools"
+                  items={MENU_CONFIG.tools}
+                  collapsed={false}
+                  gradient="from-cyan-400 via-blue-500 to-indigo-600"
+                />
+              </div>
+              <UserProfile
+                userData={userData}
+                loading={loading}
+                collapsed={false}
+              />
+            </motion.aside>
+          </div>
+        )}
+      </AnimatePresence>
 
-        <button
-          onClick={() => setCollapsed(!collapsed)}
-          className="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-all duration-200 border border-white/10 hover:border-white/20 shadow-lg hover:shadow-xl ml-auto"
-          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-        >
-          <motion.div
-            animate={{ rotate: collapsed ? 0 : 180 }}
-            transition={{ duration: 0.3 }}
+      {/* Desktop sidebar */}
+      <motion.aside
+        animate={{ width: collapsed ? 80 : 256 }}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
+        className="hidden md:flex bg-gradient-to-b from-[rgba(20,20,25,0.95)] to-[rgba(30,30,35,0.95)] backdrop-blur-2xl text-white h-screen flex-col sticky top-0 border-r border-white/10 shadow-2xl overflow-hidden z-40"
+        style={{
+          backdropFilter: "blur(24px)",
+          WebkitBackdropFilter: "blur(24px)",
+        }}
+      >
+        {/* Animated background gradient */}
+        <div className="absolute inset-0 bg-gradient-to-br from-violet-500/5 via-transparent to-indigo-500/5 pointer-events-none" />
+
+        {/* Subtle animated orbs */}
+        <div className="absolute top-20 -left-20 w-40 h-40 bg-violet-500/10 rounded-full blur-3xl animate-pulse" />
+        <div
+          className="absolute bottom-20 -right-20 w-40 h-40 bg-indigo-500/10 rounded-full blur-3xl animate-pulse"
+          style={{ animationDelay: "1s" }}
+        />
+
+        {/* Header */}
+        <div className="flex items-center justify-between p-4 border-b border-white/10">
+          <Link to="/" className={`flex items-center gap-2 ${collapsed ? "justify-center w-full" : ""}`}>
+             {!collapsed && <img src="/dark-nav-logo.png" className="h-8 w-auto drop-shadow-lg" alt="logo" />}
+             {collapsed && <img src="/logo-icon.png" className="h-8 w-auto drop-shadow-lg" alt="logo" />}
+          </Link>
+          {/* Collapse button for larger screens */}
+          <button
+            onClick={() => setCollapsed(!collapsed)}
+            className={`hidden md:block p-2 rounded-lg bg-white/5 hover:bg-white/10 ${collapsed ? "absolute right-1/2 translate-x-1/2 top-20" : ""}`}
+            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
           >
-            <ChevronLeft size={18} />
-          </motion.div>
-        </button>
-      </div>
+            <motion.div
+              animate={{ rotate: collapsed ? 0 : 180 }}
+              transition={{ duration: 0.3 }}
+            >
+              <ChevronLeft size={18} />
+            </motion.div>
+          </button>
+        </div>
 
-      {/* Menu Items */}
-      <div className="relative z-10 flex-1 overflow-y-auto overflow-x-hidden px-2 py-6 space-y-6 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
-        <MenuSection
-          title="Menu"
-          items={MENU_CONFIG.main}
-          collapsed={collapsed}
-          gradient="from-violet-500 via-purple-500 to-indigo-600"
-        />
-        <MenuSection
-          title="Tools"
-          items={MENU_CONFIG.tools}
-          collapsed={collapsed}
-          gradient="from-cyan-400 via-blue-500 to-indigo-600"
-        />
-      </div>
+        {/* Menu Items */}
+        <div className="flex-1 overflow-y-auto overflow-x-hidden px-2 py-6 space-y-6 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
+          <MenuSection
+            title="Menu"
+            items={MENU_CONFIG.main}
+            collapsed={collapsed}
+            gradient="from-violet-500 via-purple-500 to-indigo-600"
+          />
+          <MenuSection
+            title="Tools"
+            items={MENU_CONFIG.tools}
+            collapsed={collapsed}
+            gradient="from-cyan-400 via-blue-500 to-indigo-600"
+          />
+        </div>
 
-      {/* User Profile */}
-      <UserProfile
-        userData={userData}
-        loading={loading}
-        collapsed={collapsed}
-      />
-    </motion.aside>
+        {/* User Profile */}
+        <UserProfile
+          userData={userData}
+          loading={loading}
+          collapsed={collapsed}
+        />
+      </motion.aside>
+    </>
   );
 };
 
