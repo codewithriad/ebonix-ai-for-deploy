@@ -114,15 +114,15 @@ export default function Templates() {
   });
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white">
-      <div className="max-w-7xl mx-auto p-6">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-300">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         {/* HEADER */}
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold">Templates</h1>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">Templates</h1>
 
           <button
             onClick={() => setIsModalOpen(true)}
-            className="px-4 py-2 bg-lime-400 hover:bg-lime-500 text-gray-900 rounded-lg font-medium flex items-center gap-2"
+            className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium flex items-center gap-2 justify-center hover:scale-105 shadow-lg transition-all duration-300"
           >
             <Plus className="w-5 h-5" />
             Create Template
@@ -131,15 +131,15 @@ export default function Templates() {
 
         {/* SEARCH + FILTERS */}
         <div
-          className="bg-gray-800 border border-gray-700 rounded-xl p-4 mb-6"
+          className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-4 mb-6 shadow-md"
           ref={dropdownRef}
         >
           <div className="flex flex-wrap gap-4 items-center">
             {/* Search */}
             <div className="relative flex-1 min-w-[250px]">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400" />
               <input
-                className="w-full bg-gray-900 border border-gray-700 rounded-lg pl-10 py-2.5 text-white"
+                className="w-full bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 rounded-lg pl-10 py-2.5 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="Search templates..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -181,54 +181,54 @@ export default function Templates() {
 
             {/* Sort */}
             <select
-              className="bg-gray-700 px-3 py-2 rounded-lg text-sm"
+              className="bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white px-3 py-2 rounded-lg text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
             >
-              <option value="default">Sort: Default</option>
-              <option value="name">Name</option>
-              <option value="category">Category</option>
-              <option value="status">Status</option>
+              <option value="default" className="bg-white dark:bg-gray-900 text-gray-900 dark:text-white">Sort: Default</option>
+              <option value="name" className="bg-white dark:bg-gray-900 text-gray-900 dark:text-white">Name</option>
+              <option value="category" className="bg-white dark:bg-gray-900 text-gray-900 dark:text-white">Category</option>
+              <option value="status" className="bg-white dark:bg-gray-900 text-gray-900 dark:text-white">Status</option>
             </select>
           </div>
         </div>
 
         {/* Count */}
-        <p className="text-sm text-gray-400 mb-4">
+        <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
           Total {sortedTemplates.length} templates
         </p>
 
         {/* TABLE */}
-        <div className="bg-gray-800 border border-gray-700 rounded-xl overflow-hidden">
+        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden shadow-md">
           <div className="hidden lg:block">
             <table className="w-full">
-              <thead className="bg-gray-850">
+              <thead className="bg-gray-100 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
                 <tr>
-                  <th className="px-6 py-3 text-left text-gray-400 text-xs uppercase">
+                  <th className="text-left px-6 py-3 text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">
                     Template
                   </th>
-                  <th className="px-6 py-3 text-left text-gray-400 text-xs uppercase">
+                  <th className="text-left px-6 py-3 text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">
                     Category
                   </th>
-                  <th className="px-6 py-3 text-left text-gray-400 text-xs uppercase">
+                  <th className="text-left px-6 py-3 text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">
                     Status
                   </th>
                   <th></th>
                 </tr>
               </thead>
 
-              <tbody className="divide-y divide-gray-700">
+              <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
                 {sortedTemplates.map((t) => (
-                  <tr key={t.id} className="hover:bg-gray-750">
+                  <tr key={t.id} className="hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                     <td className="px-6 py-4 flex items-center gap-3">
                       <div
-                        className={`w-12 h-12 rounded-full ${t.iconBg} flex items-center justify-center font-bold`}
+                        className={`w-12 h-12 rounded-full ${t.iconBg} flex items-center justify-center font-bold text-white`}
                       >
                         {t.icon}
                       </div>
-                      {t.name}
+                      <span className="text-gray-900 dark:text-white">{t.name}</span>
                     </td>
-                    <td className="px-6 py-4">{t.category}</td>
+                    <td className="px-6 py-4 text-gray-700 dark:text-gray-300">{t.category}</td>
                     <td className="px-6 py-4">
                       <button
                         onClick={() => toggleStatus(t.id)}
@@ -238,7 +238,7 @@ export default function Templates() {
                           className={`h-6 w-11 rounded-full flex items-center transition-colors ${
                             t.status === "Active"
                               ? "bg-green-600"
-                              : "bg-gray-600"
+                              : "bg-gray-400 dark:bg-gray-600"
                           }`}
                         >
                           <span
@@ -249,11 +249,11 @@ export default function Templates() {
                             }`}
                           />
                         </div>
-                        <span>{t.status}</span>
+                        <span className="text-gray-900 dark:text-white">{t.status}</span>
                       </button>
                     </td>
                     <td className="px-6 py-4">
-                      <MoreVertical className="w-5 h-5 text-gray-400" />
+                      <MoreVertical className="w-5 h-5 text-gray-600 dark:text-gray-400" />
                     </td>
                   </tr>
                 ))}
@@ -262,18 +262,18 @@ export default function Templates() {
           </div>
 
           {/* MOBILE */}
-          <div className="lg:hidden divide-y divide-gray-700">
+          <div className="lg:hidden divide-y divide-gray-200 dark:divide-gray-700">
             {sortedTemplates.map((t) => (
-              <div key={t.id} className="p-4 hover:bg-gray-750">
+              <div key={t.id} className="p-4 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                 <div className="flex items-start gap-3">
                   <div
-                    className={`w-12 h-12 rounded-full ${t.iconBg} flex items-center justify-center`}
+                    className={`w-12 h-12 rounded-full ${t.iconBg} flex items-center justify-center text-white font-bold`}
                   >
                     {t.icon}
                   </div>
                   <div>
-                    <h3 className="font-medium">{t.name}</h3>
-                    <p className="text-gray-400">{t.category}</p>
+                    <h3 className="font-medium text-gray-900 dark:text-white">{t.name}</h3>
+                    <p className="text-gray-600 dark:text-gray-400">{t.category}</p>
                   </div>
                 </div>
               </div>
@@ -310,17 +310,17 @@ function FilterButton({
     <div className="relative">
       <button
         onClick={() => setOpenDropdown(openDropdown === target ? null : target)}
-        className="px-4 py-2.5 bg-gray-700 hover:bg-gray-600 rounded-lg flex items-center gap-2 text-sm"
+        className="px-4 py-2.5 bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-700 rounded-lg flex items-center gap-2 text-sm text-gray-900 dark:text-white transition-colors"
       >
-        <span className="text-gray-400">⊝</span>
+        <span className="text-gray-500 dark:text-gray-400">⊝</span>
         {label}
         <ChevronDown className="w-4 h-4" />
       </button>
 
       {openDropdown === target && (
-        <div className="absolute top-full mt-2 bg-gray-800 border border-gray-700 rounded-lg shadow-lg w-40 z-20">
+        <div className="absolute top-full mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg w-40 z-20">
           <button
-            className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-700"
+            className="block w-full text-left px-4 py-2 text-sm text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors rounded-t-lg"
             onClick={() => {
               onSelect("all");
               setOpenDropdown(null);
@@ -332,7 +332,7 @@ function FilterButton({
           {options.map((op: string) => (
             <button
               key={op}
-              className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-700"
+              className="block w-full text-left px-4 py-2 text-sm text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
               onClick={() => {
                 onSelect(op);
                 setOpenDropdown(null);
@@ -370,41 +370,41 @@ function CreateTemplateModal({ close, addTemplate }: any) {
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-gray-900 p-6 rounded-xl w-full max-w-md border border-gray-700">
-        <h2 className="text-xl font-bold mb-4">Create Template</h2>
+      <div className="bg-white dark:bg-gray-900 p-6 rounded-xl w-full max-w-md border border-gray-200 dark:border-gray-700 shadow-xl">
+        <h2 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">Create Template</h2>
 
         <input
           placeholder="Template Name"
-          className="w-full bg-gray-800 border border-gray-700 p-2 rounded-lg mb-3"
+          className="w-full bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 p-2 rounded-lg mb-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
 
         <select
-          className="w-full bg-gray-800 border border-gray-700 p-2 rounded-lg mb-3"
+          className="w-full bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white p-2 rounded-lg mb-3 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer transition-colors"
           value={category}
           onChange={(e) => setCategory(e.target.value)}
         >
-          <option>Website</option>
-          <option>SEO</option>
-          <option>Blog</option>
-          <option>Marketing</option>
+          <option className="bg-white dark:bg-gray-900 text-gray-900 dark:text-white">Website</option>
+          <option className="bg-white dark:bg-gray-900 text-gray-900 dark:text-white">SEO</option>
+          <option className="bg-white dark:bg-gray-900 text-gray-900 dark:text-white">Blog</option>
+          <option className="bg-white dark:bg-gray-900 text-gray-900 dark:text-white">Marketing</option>
         </select>
 
         <input
           placeholder="Icon (Emoji)"
-          className="w-full bg-gray-800 border border-gray-700 p-2 rounded-lg mb-3"
+          className="w-full bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 p-2 rounded-lg mb-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
           value={icon}
           onChange={(e) => setIcon(e.target.value)}
         />
 
         <div className="flex justify-end gap-3">
-          <button onClick={close} className="px-4 py-2 bg-gray-700 rounded-lg">
+          <button onClick={close} className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg transition-colors">
             Cancel
           </button>
           <button
             onClick={handleSubmit}
-            className="px-4 py-2 bg-lime-400 text-black rounded-lg"
+            className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors"
           >
             Create
           </button>

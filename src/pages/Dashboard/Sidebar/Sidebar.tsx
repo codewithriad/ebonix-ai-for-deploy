@@ -1,22 +1,23 @@
 import {
-  IconEyeDollar,
-  IconShoppingBag,
-  IconTemplate,
+    IconEyeDollar,
+    IconShoppingBag,
+    IconTemplate,
 } from "@tabler/icons-react";
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { AnimatePresence, motion } from "framer-motion";
 import {
-  Bot,
-  ChevronLeft,
-  Home,
-  LayoutGrid,
-  MessageSquare,
-  Mic,
-  Plug,
-  RefreshCw,
-  Settings,
-  User
+    Bot,
+    ChevronLeft,
+    CreditCard,
+    Home,
+    LayoutGrid,
+    MessageSquare,
+    Mic,
+    Plug,
+    RefreshCw,
+    Settings,
+    User
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
@@ -50,6 +51,12 @@ const MENU_CONFIG = {
       icon: "/dashboard/Cube.svg",
       fallbackIcon: MessageSquare,
       path: "/dashboard/plans",
+    },
+    {
+      label: "Subscriptions",
+      icon: "/dashboard/CreditCard.svg",
+      fallbackIcon: CreditCard,
+      path: "/dashboard/subscriptions",
     },
     {
       label: "Assistants",

@@ -17,6 +17,7 @@ import Plugins from "./pages/Dashboard/Plugins/Plugins";
 import AllOrders from "./pages/Dashboard/Sidebar/AllOrders";
 import Payout from "./pages/Dashboard/Sidebar/Payout";
 import Plans from "./pages/Dashboard/Sidebar/Plans";
+import SubscriptionsPage from "./pages/Dashboard/Sidebar/SubscriptionsPage";
 import Templates from "./pages/Dashboard/Sidebar/Templates";
 import Update from "./pages/Dashboard/Update/Update";
 import Voices from "./pages/Dashboard/Voices/Voices";
@@ -65,12 +66,12 @@ const App = React.memo(() => (
                   </ProtectedRoute>
                 }
               >
-                <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/dashboard/profile" element={<Profile />} />
                 <Route path="/dashboard/settings" element={<Settings />} />
                 <Route path="/dashboard/all-users" element={<AllUsersPage />} />
                 <Route path="/dashboard/all-orders" element={<AllOrders />} />
                 <Route path="/dashboard/plans" element={<Plans />} />
+                <Route path="/dashboard/subscriptions" element={<SubscriptionsPage />} />
                 <Route path="/dashboard/templates" element={<Templates />} />
                 <Route path="/dashboard/payouts" element={<Payout />} />
                 <Route path="/dashboard/categories" element={<Categories />} />
@@ -78,6 +79,10 @@ const App = React.memo(() => (
                 <Route path="/dashboard/voices" element={<Voices />} />
                 <Route path="/dashboard/plugins" element={<Plugins />} />
                 <Route path="/dashboard/update" element={<Update />} />
+              </Route>
+
+              <Route element={<DashboardLayout />}>
+                <Route path="/dashboard" element={<Dashboard />} />
               </Route>
 
               <Route path="*" element={<NotFound />} />

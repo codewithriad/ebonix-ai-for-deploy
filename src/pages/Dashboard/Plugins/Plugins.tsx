@@ -1,9 +1,8 @@
-import { useTheme } from "@/pages/HomePage/ThemeProvider";
 import {
-    ChevronDown,
-    MoreVertical,
-    Plus,
-    Search,
+  ChevronDown,
+  MoreVertical,
+  Plus,
+  Search,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -17,7 +16,6 @@ interface Plugin {
 }
 
 const Plugins = () => {
-  const { theme } = useTheme();
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
@@ -108,20 +106,12 @@ const Plugins = () => {
   });
 
   return (
-    <div
-      className={`min-h-screen transition-colors duration-300 ${
-        theme === "dark" ? "bg-gray-900 text-white" : "bg-gray-50 text-gray-900"
-      }`}
-    >
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-300">
       <div className="w-full">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
           {/* Header */}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-            <h1
-              className={`text-2xl sm:text-3xl font-bold ${
-                theme === "dark" ? "text-white" : "text-gray-900"
-              }`}
-            >
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
               Plugins
             </h1>
             <button 
@@ -134,31 +124,17 @@ const Plugins = () => {
           </div>
 
           {/* Search and Filter */}
-          <div
-            className={`rounded-xl border p-4 mb-6 ${
-              theme === "dark"
-                ? "bg-gray-800 border-gray-700"
-                : "bg-white border-gray-200 shadow-md"
-            }`}
-          >
+          <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-4 mb-6 shadow-md">
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
               {/* Search */}
               <div className="flex-1 relative">
-                <Search
-                  className={`absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 ${
-                    theme === "dark" ? "text-gray-400" : "text-gray-500"
-                  }`}
-                />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500 dark:text-gray-400" />
                 <input
                   type="text"
                   placeholder="Search..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className={`w-full border rounded-lg pl-10 pr-4 py-2.5 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                    theme === "dark"
-                      ? "bg-gray-900 border-gray-700 text-white placeholder-gray-400"
-                      : "bg-gray-50 border-gray-300 text-gray-900 placeholder-gray-500"
-                  }`}
+                  className="w-full bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 rounded-lg pl-10 pr-4 py-2.5 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
 
@@ -167,30 +143,18 @@ const Plugins = () => {
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
-                  className={`appearance-none border rounded-lg pl-4 pr-10 py-2.5 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer ${
-                    theme === "dark"
-                      ? "bg-gray-900 border-gray-700 text-white"
-                      : "bg-gray-50 border-gray-300 text-gray-900"
-                  }`}
+                  className="appearance-none bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white rounded-lg pl-4 pr-10 py-2.5 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
                 >
-                  <option value="all">Status</option>
-                  <option value="active">Active</option>
-                  <option value="inactive">Inactive</option>
+                  <option value="all" className="bg-white dark:bg-gray-900 text-gray-900 dark:text-white">Status</option>
+                  <option value="active" className="bg-white dark:bg-gray-900 text-gray-900 dark:text-white">Active</option>
+                  <option value="inactive" className="bg-white dark:bg-gray-900 text-gray-900 dark:text-white">Inactive</option>
                 </select>
-                <ChevronDown
-                  className={`absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 pointer-events-none ${
-                    theme === "dark" ? "text-gray-400" : "text-gray-500"
-                  }`}
-                />
+                <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 pointer-events-none text-gray-500 dark:text-gray-400" />
               </div>
             </div>
 
             {/* Plugin Count */}
-            <div
-              className={`mt-3 text-sm ${
-                theme === "dark" ? "text-gray-400" : "text-gray-600"
-              }`}
-            >
+            <div className="mt-3 text-sm text-gray-600 dark:text-gray-400">
               Total {filteredPlugins.length} plugins
             </div>
           </div>
@@ -200,20 +164,12 @@ const Plugins = () => {
             {filteredPlugins.map((plugin) => (
               <div
                 key={plugin.id}
-                className={`rounded-xl border p-5 transition-all duration-300 hover:scale-[1.02] ${
-                  theme === "dark"
-                    ? "bg-gray-800 border-gray-700 hover:border-gray-600"
-                    : "bg-white border-gray-200 hover:border-gray-300 shadow-md hover:shadow-lg"
-                }`}
+                className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 rounded-xl p-5 transition-all duration-300 hover:scale-[1.02] shadow-md hover:shadow-lg"
               >
                 {/* Card Header */}
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex-1 min-w-0">
-                    <h3
-                      className={`text-lg font-semibold mb-1 ${
-                        theme === "dark" ? "text-white" : "text-gray-900"
-                      }`}
-                    >
+                    <h3 className="text-lg font-semibold mb-1 text-gray-900 dark:text-white">
                       {plugin.name}
                     </h3>
                     {plugin.status === "active" && (
@@ -232,53 +188,21 @@ const Plugins = () => {
                       onClick={() =>
                         setOpenMenuId(openMenuId === plugin.id ? null : plugin.id)
                       }
-                      className={`p-2 rounded-lg transition-colors ${
-                        theme === "dark"
-                          ? "hover:bg-gray-700"
-                          : "hover:bg-gray-100"
-                      }`}
+                      className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                     >
-                      <MoreVertical
-                        className={`w-5 h-5 ${
-                          theme === "dark" ? "text-gray-400" : "text-gray-600"
-                        }`}
-                      />
+                      <MoreVertical className="w-5 h-5 text-gray-600 dark:text-gray-400" />
                     </button>
 
                     {/* Dropdown Menu */}
                     {openMenuId === plugin.id && (
-                      <div
-                        className={`absolute right-0 mt-2 w-48 rounded-lg shadow-lg border z-10 ${
-                          theme === "dark"
-                            ? "bg-gray-800 border-gray-700"
-                            : "bg-white border-gray-200"
-                        }`}
-                      >
-                        <button
-                          className={`w-full text-left px-4 py-2 text-sm transition-colors rounded-t-lg ${
-                            theme === "dark"
-                              ? "hover:bg-gray-700 text-gray-300"
-                              : "hover:bg-gray-100 text-gray-700"
-                          }`}
-                        >
+                      <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-10">
+                        <button className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors rounded-t-lg">
                           Configure
                         </button>
-                        <button
-                          className={`w-full text-left px-4 py-2 text-sm transition-colors ${
-                            theme === "dark"
-                              ? "hover:bg-gray-700 text-gray-300"
-                              : "hover:bg-gray-100 text-gray-700"
-                          }`}
-                        >
+                        <button className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                           Disable
                         </button>
-                        <button
-                          className={`w-full text-left px-4 py-2 text-sm transition-colors rounded-b-lg ${
-                            theme === "dark"
-                              ? "hover:bg-gray-700 text-red-400"
-                              : "hover:bg-gray-100 text-red-600"
-                          }`}
-                        >
+                        <button className="w-full text-left px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors rounded-b-lg">
                           Uninstall
                         </button>
                       </div>
@@ -287,20 +211,12 @@ const Plugins = () => {
                 </div>
 
                 {/* Description */}
-                <p
-                  className={`text-sm mb-4 ${
-                    theme === "dark" ? "text-gray-400" : "text-gray-600"
-                  }`}
-                >
+                <p className="text-sm mb-4 text-gray-600 dark:text-gray-400">
                   {plugin.description}
                 </p>
 
                 {/* Version and Author */}
-                <div
-                  className={`text-xs ${
-                    theme === "dark" ? "text-gray-500" : "text-gray-500"
-                  }`}
-                >
+                <div className="text-xs text-gray-500 dark:text-gray-500">
                   Version {plugin.version} | by{" "}
                   <span className="font-medium">{plugin.author}</span>
                 </div>
@@ -311,22 +227,14 @@ const Plugins = () => {
           {/* Empty State */}
           {filteredPlugins.length === 0 && (
             <div className="text-center py-12">
-              <p
-                className={`text-lg ${
-                  theme === "dark" ? "text-gray-400" : "text-gray-600"
-                }`}
-              >
+              <p className="text-lg text-gray-600 dark:text-gray-400">
                 No plugins found
               </p>
             </div>
           )}
 
           {/* Footer */}
-          <div
-            className={`text-center text-sm py-4 ${
-              theme === "dark" ? "text-gray-500" : "text-gray-500"
-            }`}
-          >
+          <div className="text-center text-sm py-4 text-gray-500 dark:text-gray-500">
             All rights reserved. © 2025 Alkeedo | Version 3.8.5
           </div>
         </div>

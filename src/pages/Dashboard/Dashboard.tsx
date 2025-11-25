@@ -2,6 +2,7 @@ import { DollarSign, ShoppingCart, TrendingUp, Users } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import CustomerSatisfactions from "./CustomerSatisfactions";
 import LatestOrders from "./LatestOrders";
+import Subscriptions from "./Subscriptions";
 import KpiCard from "./shared/KpiCard";
 import SalesChart from "./shared/SalesChart";
 import TopCountries from "./shared/TopCountries";
@@ -80,9 +81,9 @@ const Dashboard = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Sales Chart - Takes up 2 columns on large screens */}
-        <div className="lg:col-span-2 w-full flex flex-col bg-white dark:bg-gray-900 p-5 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800">
+        <div className="lg:col-span-2 w-full flex flex-col bg-white dark:bg-gray-900 p-0 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800">
           {/* header */}
-          <div className="flex justify-between items-center gap-4 mb-6">
+          <div className="flex justify-between items-center gap-4 mb-0 p-3 border-b border-gray-200 dark:border-gray-700">
             <div>
               <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
                 Sales Overview
@@ -99,7 +100,7 @@ const Dashboard = () => {
           </div>
 
           {/* chart */}
-          <div className="w-full flex-1 min-h-[300px]">
+          <div className="w-full flex-1 min-h-[300px] md:min-h-[600px] p-4">
             <SalesChart />
           </div>
         </div>
@@ -107,8 +108,8 @@ const Dashboard = () => {
         {/* Right Column: Top Countries & Users */}
         <div className="flex flex-col gap-6">
           {/* top countries */}
-          <div className="flex-1 bg-white dark:bg-gray-900 p-5 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 flex flex-col">
-            <div className="flex justify-between items-center gap-4 mb-4">
+          <div className="flex-1 bg-white dark:bg-gray-900 p-0 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 flex flex-col">
+            <div className="flex justify-between items-center gap-4 mb-0 p-3 border-b border-gray-200 dark:border-gray-700">
               <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
                 Top Countries
               </h2>
@@ -116,14 +117,14 @@ const Dashboard = () => {
                 <EllipsisVerticalIcon className="w-5 h-5" />
               </button>
             </div>
-            <div className="flex-1 overflow-y-auto">
+            <div className="flex-1 overflow-y-auto p-4">
               <TopCountries />
             </div>
           </div>
 
           {/* users card */}
-          <div className="flex-1 bg-white dark:bg-gray-900 p-5 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 flex flex-col">
-            <div className="flex justify-between items-center mb-4">
+          <div className="flex-1 bg-white dark:bg-gray-900 p-0 rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 flex flex-col">
+            <div className="flex justify-between items-center mb-0 p-3 border-b border-gray-200 dark:border-gray-700">
               <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
                 New Users
               </h2>
@@ -134,7 +135,7 @@ const Dashboard = () => {
                 View All
               </NavLink>
             </div>
-            <div className="flex-1 overflow-y-auto">
+            <div className="flex-1 overflow-y-auto p-4">
               <UsersCard />
             </div>
           </div>
@@ -151,6 +152,11 @@ const Dashboard = () => {
         <div className="xl:col-span-1">
           <CustomerSatisfactions />
         </div>
+      </div>
+
+      {/* Second Row: Subscriptions */}
+      <div className="grid grid-cols-1 gap-6">
+        <Subscriptions />
       </div>
     </>
   );

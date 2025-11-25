@@ -1,10 +1,10 @@
 import { db } from "@/firebase/firebase.config";
 import {
-  collection,
-  limit,
-  onSnapshot,
-  orderBy,
-  query,
+    collection,
+    limit,
+    onSnapshot,
+    orderBy,
+    query,
 } from "firebase/firestore";
 import { useEffect, useState } from "react";
 
@@ -44,7 +44,7 @@ export default function UsersCard() {
   }, []);
 
   return (
-    <div className="bg-white dark:bg-gray-800 p-4 rounded-xl w-full">
+    <div className="w-full">
       <ul className="space-y-4">
         {users.map((user) => (
           <li key={user.id} className="flex items-center justify-between">

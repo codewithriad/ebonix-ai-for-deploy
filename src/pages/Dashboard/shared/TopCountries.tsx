@@ -2,7 +2,7 @@ import { topCountries } from "@/data/topCountries";
 
 export default function TopCountries() {
   return (
-    <div className="rounded-2xl dark:border-gray-700 bg-white dark:bg-gray-800 p-6 shadow-sm w-full max-w-xl">
+    <div className="w-full">
       <ul className="space-y-5">
         {topCountries.map((country) => (
           <li key={country.code}>

@@ -1,21 +1,20 @@
 import { db } from "@/firebase/firebase.config";
-import { useTheme } from "@/pages/HomePage/ThemeProvider";
 import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import {
-    Calendar,
-    CheckCircle,
-    Download,
-    Edit,
-    Filter,
-    Mail,
-    MoreVertical,
-    RefreshCw,
-    Search,
-    Shield,
-    Trash2,
-    UserCheck,
-    UserX,
-    XCircle,
+  Calendar,
+  CheckCircle,
+  Download,
+  Edit,
+  Filter,
+  Mail,
+  MoreVertical,
+  RefreshCw,
+  Search,
+  Shield,
+  Trash2,
+  UserCheck,
+  UserX,
+  XCircle,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -30,7 +29,6 @@ interface User {
 }
 
 export default function AllUsers() {
-  const { theme } = useTheme();
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
@@ -73,18 +71,18 @@ export default function AllUsers() {
 
   const getRoleBadgeStyle = (role: string) => {
     const styles = {
-      admin: "bg-purple-500/20 text-purple-400 border border-purple-500/30",
-      user: "bg-blue-500/20 text-blue-400 border border-blue-500/30",
-      moderator: "bg-orange-500/20 text-orange-400 border border-orange-500/30",
+      admin: "bg-purple-500/20 text-purple-600 dark:text-purple-400 border border-purple-500/30",
+      user: "bg-blue-500/20 text-blue-600 dark:text-blue-400 border border-blue-500/30",
+      moderator: "bg-orange-500/20 text-orange-600 dark:text-orange-400 border border-orange-500/30",
     };
     return styles[role as keyof typeof styles] || styles.user;
   };
 
   const getStatusBadgeStyle = (status: string) => {
     const styles = {
-      active: "bg-green-500/20 text-green-400 border border-green-500/30",
-      inactive: "bg-gray-500/20 text-gray-400 border border-gray-500/30",
-      suspended: "bg-red-500/20 text-red-400 border border-red-500/30",
+      active: "bg-green-500/20 text-green-600 dark:text-green-400 border border-green-500/30",
+      inactive: "bg-gray-500/20 text-gray-600 dark:text-gray-400 border border-gray-500/30",
+      suspended: "bg-red-500/20 text-red-600 dark:text-red-400 border border-red-500/30",
     };
     return styles[status as keyof typeof styles] || styles.active;
   };
@@ -106,20 +104,14 @@ export default function AllUsers() {
 
   if (loading) {
     return (
-      <div className={`min-h-screen flex items-center justify-center ${
-        theme === "dark" ? "bg-gray-900" : "bg-gray-50"
-      }`}>
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
         <RefreshCw className="w-8 h-8 text-blue-500 animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className={`min-h-screen transition-colors duration-300 ${
-      theme === "dark" 
-        ? "bg-gray-900 text-white" 
-        : "bg-gray-50 text-gray-900"
-    }`}>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-300">
       <div className="w-full">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
           {/* Header */}
@@ -127,109 +119,69 @@ export default function AllUsers() {
             <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-2 bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
               All Users
             </h1>
-            <p className={`text-sm sm:text-base ${
-              theme === "dark" ? "text-gray-400" : "text-gray-600"
-            }`}>
+            <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
               Manage and monitor all registered users
             </p>
           </div>
 
           {/* Stats Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-            <div className={`rounded-xl p-4 sm:p-6 transition-all duration-300 hover:scale-105 ${
-              theme === "dark"
-                ? "bg-gradient-to-br from-blue-500/10 to-blue-600/5 border border-blue-500/20"
-                : "bg-white border border-blue-200 shadow-lg shadow-blue-100"
-            }`}>
+            <div className="rounded-xl p-4 sm:p-6 transition-all duration-300 hover:scale-105 bg-white dark:bg-gray-800 border border-blue-200 dark:border-gray-700 shadow-lg shadow-blue-100 dark:shadow-none">
               <div className="flex items-center justify-between mb-2">
-                <p className={`text-sm font-medium ${
-                  theme === "dark" ? "text-gray-400" : "text-gray-600"
-                }`}>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
                   Total Users
                 </p>
                 <UserCheck className="w-5 h-5 text-blue-500" />
               </div>
-              <p className={`text-2xl sm:text-3xl font-bold ${
-                theme === "dark" ? "text-white" : "text-gray-900"
-              }`}>
+              <p className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
                 {stats.total}
               </p>
             </div>
 
-            <div className={`rounded-xl p-4 sm:p-6 transition-all duration-300 hover:scale-105 ${
-              theme === "dark"
-                ? "bg-gradient-to-br from-green-500/10 to-green-600/5 border border-green-500/20"
-                : "bg-white border border-green-200 shadow-lg shadow-green-100"
-            }`}>
+            <div className="rounded-xl p-4 sm:p-6 transition-all duration-300 hover:scale-105 bg-white dark:bg-gray-800 border border-green-200 dark:border-gray-700 shadow-lg shadow-green-100 dark:shadow-none">
               <div className="flex items-center justify-between mb-2">
-                <p className={`text-sm font-medium ${
-                  theme === "dark" ? "text-gray-400" : "text-gray-600"
-                }`}>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
                   Active Users
                 </p>
                 <CheckCircle className="w-5 h-5 text-green-500" />
               </div>
-              <p className={`text-2xl sm:text-3xl font-bold ${
-                theme === "dark" ? "text-white" : "text-gray-900"
-              }`}>
+              <p className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
                 {stats.active}
               </p>
             </div>
 
-            <div className={`rounded-xl p-4 sm:p-6 transition-all duration-300 hover:scale-105 sm:col-span-2 lg:col-span-1 ${
-              theme === "dark"
-                ? "bg-gradient-to-br from-purple-500/10 to-purple-600/5 border border-purple-500/20"
-                : "bg-white border border-purple-200 shadow-lg shadow-purple-100"
-            }`}>
+            <div className="rounded-xl p-4 sm:p-6 transition-all duration-300 hover:scale-105 sm:col-span-2 lg:col-span-1 bg-white dark:bg-gray-800 border border-purple-200 dark:border-gray-700 shadow-lg shadow-purple-100 dark:shadow-none">
               <div className="flex items-center justify-between mb-2">
-                <p className={`text-sm font-medium ${
-                  theme === "dark" ? "text-gray-400" : "text-gray-600"
-                }`}>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
                   Verified Users
                 </p>
                 <Shield className="w-5 h-5 text-purple-500" />
               </div>
-              <p className={`text-2xl sm:text-3xl font-bold ${
-                theme === "dark" ? "text-white" : "text-gray-900"
-              }`}>
+              <p className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
                 {stats.verified}
               </p>
             </div>
           </div>
 
           {/* Search and Filters */}
-          <div className={`rounded-xl border p-4 mb-6 ${
-            theme === "dark"
-              ? "bg-gray-800 border-gray-700"
-              : "bg-white border-gray-200 shadow-md"
-          }`}>
+          <div className="rounded-xl border p-4 mb-6 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 shadow-md">
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
               {/* Search */}
               <div className="flex-1 relative">
-                <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 ${
-                  theme === "dark" ? "text-gray-400" : "text-gray-500"
-                }`} />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500 dark:text-gray-400" />
                 <input
                   type="text"
                   placeholder="Search by name or email..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className={`w-full border rounded-lg pl-10 pr-4 py-2.5 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                    theme === "dark"
-                      ? "bg-gray-900 border-gray-700 text-white placeholder-gray-400"
-                      : "bg-gray-50 border-gray-300 text-gray-900 placeholder-gray-500"
-                  }`}
+                  className="w-full border rounded-lg pl-10 pr-4 py-2.5 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-50 dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
                 />
               </div>
 
               {/* Filter Button */}
               <button
                 onClick={() => setShowFilters(!showFilters)}
-                className={`px-4 py-2.5 rounded-lg transition-all duration-300 flex items-center gap-2 justify-center whitespace-nowrap ${
-                  theme === "dark"
-                    ? "bg-gray-700 hover:bg-gray-600 text-white"
-                    : "bg-gray-200 hover:bg-gray-300 text-gray-900"
-                }`}
+                className="px-4 py-2.5 rounded-lg transition-all duration-300 flex items-center gap-2 justify-center whitespace-nowrap bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-900 dark:text-white"
               >
                 <Filter className="w-5 h-5" />
                 <span className="hidden sm:inline">Filters</span>
@@ -244,49 +196,35 @@ export default function AllUsers() {
 
             {/* Filter Dropdowns */}
             {showFilters && (
-              <div className={`grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4 pt-4 border-t ${
-                theme === "dark" ? "border-gray-700" : "border-gray-200"
-              }`}>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
                 <div>
-                  <label className={`block text-sm mb-2 font-medium ${
-                    theme === "dark" ? "text-gray-400" : "text-gray-600"
-                  }`}>
+                  <label className="block text-sm mb-2 font-medium text-gray-600 dark:text-gray-400">
                     Role
                   </label>
                   <select
                     value={filterRole}
                     onChange={(e) => setFilterRole(e.target.value)}
-                    className={`w-full border rounded-lg px-4 py-2 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                      theme === "dark"
-                        ? "bg-gray-900 border-gray-700 text-white"
-                        : "bg-gray-50 border-gray-300 text-gray-900"
-                    }`}
+                    className="w-full border rounded-lg px-4 py-2 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50 dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white"
                   >
-                    <option value="all">All Roles</option>
-                    <option value="admin">Admin</option>
-                    <option value="user">User</option>
-                    <option value="moderator">Moderator</option>
+                    <option value="all" className="bg-white dark:bg-gray-900">All Roles</option>
+                    <option value="admin" className="bg-white dark:bg-gray-900">Admin</option>
+                    <option value="user" className="bg-white dark:bg-gray-900">User</option>
+                    <option value="moderator" className="bg-white dark:bg-gray-900">Moderator</option>
                   </select>
                 </div>
                 <div>
-                  <label className={`block text-sm mb-2 font-medium ${
-                    theme === "dark" ? "text-gray-400" : "text-gray-600"
-                  }`}>
+                  <label className="block text-sm mb-2 font-medium text-gray-600 dark:text-gray-400">
                     Status
                   </label>
                   <select
                     value={filterStatus}
                     onChange={(e) => setFilterStatus(e.target.value)}
-                    className={`w-full border rounded-lg px-4 py-2 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                      theme === "dark"
-                        ? "bg-gray-900 border-gray-700 text-white"
-                        : "bg-gray-50 border-gray-300 text-gray-900"
-                    }`}
+                    className="w-full border rounded-lg px-4 py-2 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50 dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white"
                   >
-                    <option value="all">All Status</option>
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
-                    <option value="suspended">Suspended</option>
+                    <option value="all" className="bg-white dark:bg-gray-900">All Status</option>
+                    <option value="active" className="bg-white dark:bg-gray-900">Active</option>
+                    <option value="inactive" className="bg-white dark:bg-gray-900">Inactive</option>
+                    <option value="suspended" className="bg-white dark:bg-gray-900">Suspended</option>
                   </select>
                 </div>
               </div>
@@ -294,61 +232,37 @@ export default function AllUsers() {
           </div>
 
           {/* Users Table */}
-          <div className={`rounded-xl border overflow-hidden shadow-lg ${
-            theme === "dark"
-              ? "bg-gray-800 border-gray-700"
-              : "bg-white border-gray-200"
-          }`}>
+          <div className="rounded-xl border overflow-hidden shadow-lg bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
             {/* Desktop View */}
             <div className="hidden lg:block overflow-x-auto">
               <table className="w-full">
-                <thead className={`border-b ${
-                  theme === "dark"
-                    ? "bg-gray-900 border-gray-700"
-                    : "bg-gray-50 border-gray-200"
-                }`}>
+                <thead className="border-b bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700">
                   <tr>
-                    <th className={`text-left px-6 py-4 text-xs font-semibold uppercase tracking-wider ${
-                      theme === "dark" ? "text-gray-400" : "text-gray-600"
-                    }`}>
+                    <th className="text-left px-6 py-4 text-xs font-semibold uppercase tracking-wider text-gray-600 dark:text-gray-400">
                       User
                     </th>
-                    <th className={`text-left px-6 py-4 text-xs font-semibold uppercase tracking-wider ${
-                      theme === "dark" ? "text-gray-400" : "text-gray-600"
-                    }`}>
+                    <th className="text-left px-6 py-4 text-xs font-semibold uppercase tracking-wider text-gray-600 dark:text-gray-400">
                       Role
                     </th>
-                    <th className={`text-left px-6 py-4 text-xs font-semibold uppercase tracking-wider ${
-                      theme === "dark" ? "text-gray-400" : "text-gray-600"
-                    }`}>
+                    <th className="text-left px-6 py-4 text-xs font-semibold uppercase tracking-wider text-gray-600 dark:text-gray-400">
                       Status
                     </th>
-                    <th className={`text-left px-6 py-4 text-xs font-semibold uppercase tracking-wider ${
-                      theme === "dark" ? "text-gray-400" : "text-gray-600"
-                    }`}>
+                    <th className="text-left px-6 py-4 text-xs font-semibold uppercase tracking-wider text-gray-600 dark:text-gray-400">
                       Verified
                     </th>
-                    <th className={`text-left px-6 py-4 text-xs font-semibold uppercase tracking-wider ${
-                      theme === "dark" ? "text-gray-400" : "text-gray-600"
-                    }`}>
+                    <th className="text-left px-6 py-4 text-xs font-semibold uppercase tracking-wider text-gray-600 dark:text-gray-400">
                       Joined
                     </th>
-                    <th className={`text-right px-6 py-4 text-xs font-semibold uppercase tracking-wider ${
-                      theme === "dark" ? "text-gray-400" : "text-gray-600"
-                    }`}>
+                    <th className="text-right px-6 py-4 text-xs font-semibold uppercase tracking-wider text-gray-600 dark:text-gray-400">
                       Actions
                     </th>
                   </tr>
                 </thead>
-                <tbody className={`divide-y ${
-                  theme === "dark" ? "divide-gray-700" : "divide-gray-200"
-                }`}>
+                <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
                   {filteredUsers.map((user) => (
                     <tr
                       key={user.id}
-                      className={`transition-colors ${
-                        theme === "dark" ? "hover:bg-gray-750" : "hover:bg-gray-50"
-                      }`}
+                      className="transition-colors hover:bg-gray-50 dark:hover:bg-gray-700/50"
                     >
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
@@ -356,14 +270,10 @@ export default function AllUsers() {
                             {user.name.charAt(0).toUpperCase()}
                           </div>
                           <div className="min-w-0">
-                            <p className={`font-medium truncate ${
-                              theme === "dark" ? "text-white" : "text-gray-900"
-                            }`}>
+                            <p className="font-medium truncate text-gray-900 dark:text-white">
                               {user.name}
                             </p>
-                            <p className={`text-sm flex items-center gap-1 truncate ${
-                              theme === "dark" ? "text-gray-400" : "text-gray-600"
-                            }`}>
+                            <p className="text-sm flex items-center gap-1 truncate text-gray-600 dark:text-gray-400">
                               <Mail className="w-3 h-3 flex-shrink-0" />
                               <span className="truncate">{user.email}</span>
                             </p>
@@ -396,9 +306,7 @@ export default function AllUsers() {
                         )}
                       </td>
                       <td className="px-6 py-4">
-                        <p className={`text-sm flex items-center gap-1 whitespace-nowrap ${
-                          theme === "dark" ? "text-gray-400" : "text-gray-600"
-                        }`}>
+                        <p className="text-sm flex items-center gap-1 whitespace-nowrap text-gray-600 dark:text-gray-400">
                           <Calendar className="w-4 h-4" />
                           {formatDate(user.createdAt)}
                         </p>
@@ -406,30 +314,22 @@ export default function AllUsers() {
                       <td className="px-6 py-4">
                         <div className="flex items-center justify-end gap-2">
                           <button
-                            className={`p-2 rounded-lg transition-colors ${
-                              theme === "dark" ? "hover:bg-gray-700" : "hover:bg-gray-100"
-                            }`}
+                            className="p-2 rounded-lg transition-colors hover:bg-gray-100 dark:hover:bg-gray-700"
                             title="Edit"
                           >
                             <Edit className="w-4 h-4 text-blue-500" />
                           </button>
                           <button
-                            className={`p-2 rounded-lg transition-colors ${
-                              theme === "dark" ? "hover:bg-gray-700" : "hover:bg-gray-100"
-                            }`}
+                            className="p-2 rounded-lg transition-colors hover:bg-gray-100 dark:hover:bg-gray-700"
                             title="Delete"
                           >
                             <Trash2 className="w-4 h-4 text-red-500" />
                           </button>
                           <button
-                            className={`p-2 rounded-lg transition-colors ${
-                              theme === "dark" ? "hover:bg-gray-700" : "hover:bg-gray-100"
-                            }`}
+                            className="p-2 rounded-lg transition-colors hover:bg-gray-100 dark:hover:bg-gray-700"
                             title="More"
                           >
-                            <MoreVertical className={`w-4 h-4 ${
-                              theme === "dark" ? "text-gray-400" : "text-gray-600"
-                            }`} />
+                            <MoreVertical className="w-4 h-4 text-gray-600 dark:text-gray-400" />
                           </button>
                         </div>
                       </td>
@@ -442,38 +342,24 @@ export default function AllUsers() {
             {/* Tablet View (md to lg) */}
             <div className="hidden md:block lg:hidden overflow-x-auto">
               <table className="w-full">
-                <thead className={`border-b ${
-                  theme === "dark"
-                    ? "bg-gray-900 border-gray-700"
-                    : "bg-gray-50 border-gray-200"
-                }`}>
+                <thead className="border-b bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700">
                   <tr>
-                    <th className={`text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider ${
-                      theme === "dark" ? "text-gray-400" : "text-gray-600"
-                    }`}>
+                    <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-gray-600 dark:text-gray-400">
                       User
                     </th>
-                    <th className={`text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider ${
-                      theme === "dark" ? "text-gray-400" : "text-gray-600"
-                    }`}>
+                    <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-gray-600 dark:text-gray-400">
                       Details
                     </th>
-                    <th className={`text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider ${
-                      theme === "dark" ? "text-gray-400" : "text-gray-600"
-                    }`}>
+                    <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-gray-600 dark:text-gray-400">
                       Actions
                     </th>
                   </tr>
                 </thead>
-                <tbody className={`divide-y ${
-                  theme === "dark" ? "divide-gray-700" : "divide-gray-200"
-                }`}>
+                <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
                   {filteredUsers.map((user) => (
                     <tr
                       key={user.id}
-                      className={`transition-colors ${
-                        theme === "dark" ? "hover:bg-gray-750" : "hover:bg-gray-50"
-                      }`}
+                      className="transition-colors hover:bg-gray-50 dark:hover:bg-gray-700/50"
                     >
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-3">
@@ -481,14 +367,10 @@ export default function AllUsers() {
                             {user.name.charAt(0).toUpperCase()}
                           </div>
                           <div className="min-w-0">
-                            <p className={`font-medium truncate ${
-                              theme === "dark" ? "text-white" : "text-gray-900"
-                            }`}>
+                            <p className="font-medium truncate text-gray-900 dark:text-white">
                               {user.name}
                             </p>
-                            <p className={`text-sm truncate ${
-                              theme === "dark" ? "text-gray-400" : "text-gray-600"
-                            }`}>
+                            <p className="text-sm truncate text-gray-600 dark:text-gray-400">
                               {user.email}
                             </p>
                           </div>
@@ -518,17 +400,13 @@ export default function AllUsers() {
                       <td className="px-4 py-3">
                         <div className="flex items-center justify-end gap-2">
                           <button
-                            className={`p-2 rounded-lg transition-colors ${
-                              theme === "dark" ? "hover:bg-gray-700" : "hover:bg-gray-100"
-                            }`}
+                            className="p-2 rounded-lg transition-colors hover:bg-gray-100 dark:hover:bg-gray-700"
                             title="Edit"
                           >
                             <Edit className="w-4 h-4 text-blue-500" />
                           </button>
                           <button
-                            className={`p-2 rounded-lg transition-colors ${
-                              theme === "dark" ? "hover:bg-gray-700" : "hover:bg-gray-100"
-                            }`}
+                            className="p-2 rounded-lg transition-colors hover:bg-gray-100 dark:hover:bg-gray-700"
                             title="Delete"
                           >
                             <Trash2 className="w-4 h-4 text-red-500" />
@@ -542,13 +420,11 @@ export default function AllUsers() {
             </div>
 
             {/* Mobile View */}
-            <div className="md:hidden divide-y divide-gray-700">
+            <div className="md:hidden divide-y divide-gray-200 dark:divide-gray-700">
               {filteredUsers.map((user) => (
                 <div
                   key={user.id}
-                  className={`p-4 transition-colors ${
-                    theme === "dark" ? "hover:bg-gray-750" : "hover:bg-gray-50"
-                  }`}
+                  className="p-4 transition-colors hover:bg-gray-50 dark:hover:bg-gray-700/50"
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-3 min-w-0 flex-1">
@@ -556,14 +432,10 @@ export default function AllUsers() {
                         {user.name.charAt(0).toUpperCase()}
                       </div>
                       <div className="min-w-0 flex-1">
-                        <p className={`font-medium truncate ${
-                          theme === "dark" ? "text-white" : "text-gray-900"
-                        }`}>
+                        <p className="font-medium truncate text-gray-900 dark:text-white">
                           {user.name}
                         </p>
-                        <p className={`text-sm truncate ${
-                          theme === "dark" ? "text-gray-400" : "text-gray-600"
-                        }`}>
+                        <p className="text-sm truncate text-gray-600 dark:text-gray-400">
                           {user.email}
                         </p>
                       </div>
@@ -588,11 +460,7 @@ export default function AllUsers() {
                     >
                       {user.status}
                     </span>
-                    <span className={`px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1 ${
-                      theme === "dark"
-                        ? "bg-gray-700 text-gray-300"
-                        : "bg-gray-200 text-gray-700"
-                    }`}>
+                    <span className="px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
                       <Calendar className="w-3 h-3" />
                       {formatDate(user.createdAt)}
                     </span>
@@ -606,11 +474,7 @@ export default function AllUsers() {
                     <button className="px-3 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors">
                       <Trash2 className="w-4 h-4" />
                     </button>
-                    <button className={`px-3 py-2 rounded-lg transition-colors ${
-                      theme === "dark"
-                        ? "bg-gray-700 hover:bg-gray-600 text-white"
-                        : "bg-gray-200 hover:bg-gray-300 text-gray-900"
-                    }`}>
+                    <button className="px-3 py-2 rounded-lg transition-colors bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-900 dark:text-white">
                       <MoreVertical className="w-4 h-4" />
                     </button>
                   </div>
@@ -621,10 +485,8 @@ export default function AllUsers() {
             {/* Empty State */}
             {filteredUsers.length === 0 && (
               <div className="text-center py-12">
-                <UserX className={`w-12 h-12 mx-auto mb-3 ${
-                  theme === "dark" ? "text-gray-600" : "text-gray-400"
-                }`} />
-                <p className={theme === "dark" ? "text-gray-400" : "text-gray-600"}>
+                <UserX className="w-12 h-12 mx-auto mb-3 text-gray-400 dark:text-gray-600" />
+                <p className="text-gray-600 dark:text-gray-400">
                   No users found
                 </p>
               </div>
@@ -632,9 +494,7 @@ export default function AllUsers() {
           </div>
 
           {/* Results Count */}
-          <div className={`mt-4 text-center text-sm ${
-            theme === "dark" ? "text-gray-400" : "text-gray-600"
-          }`}>
+          <div className="mt-4 text-center text-sm text-gray-600 dark:text-gray-400">
             Showing {filteredUsers.length} of {users.length} users
           </div>
         </div>
